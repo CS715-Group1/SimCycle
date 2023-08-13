@@ -1,0 +1,76 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Xml;
+using UnityEngine;
+
+public class MapReader : MonoBehaviour
+{
+    Dictionary<ulong, OsmNode> nodes;
+    OsmBounds bounds;
+    List<OsmWay> ways;
+
+    [Tooltip("The resource file that contains the OSM map data")]
+    public string resourceFile;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        nodes = new Dictionary<ulong, OsmNode>();
+        ways = new List<OsmWay>();
+
+        var txtAsset = Resources.Load<TextAsset>(resourceFile);
+
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(txtAsset.text);
+
+        SetBounds(doc.SelectSingleNode("/osm/bounds"));
+        GetNodes(doc.SelectNodes("/osm/node"));
+        GetWays(doc.SelectNodes("/osm/way"));
+    }
+
+    void Update()
+    {
+        foreach(OsmWay w in ways)
+        {
+            if (w.Visible)
+            {
+                Color c = Color.cyan; // cyan for buildings
+                if (!w.IsBoundary) c = Color.red; // red for roads
+
+                for (int i = 1; i < w.NodeIDs.Count; i++)
+                {
+                    OsmNode p1 = nodes[w.NodeIDs[i-1]];
+                    OsmNode p2 = nodes[w.NodeIDs[i]];
+
+                    Vector3 v1 = p1 - bounds.Centre;
+                    Vector3 v2 = p2 - bounds.Centre;
+
+                    Debug.DrawLine(v1, v2, c);
+                }
+            }
+        }
+    }
+
+    void SetBounds(XmlNode xmlNode)
+    {
+        bounds = new OsmBounds(xmlNode);
+    }
+
+    void GetNodes(XmlNodeList xmlNodeList)
+    {
+        foreach(XmlNode n in xmlNodeList)
+        {
+            OsmNode node = new OsmNode(n);
+            nodes[node.ID] = node;
+        }
+    }
+
+    void GetWays(XmlNodeList xmlNodeList)
+    {
+        foreach(XmlNode node in xmlNodeList)
+        {
+            OsmWay way = new OsmWay(node);
+            ways.Add(way);
+        }
+    }
+}
