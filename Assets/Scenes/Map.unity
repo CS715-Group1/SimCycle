@@ -368,6 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b8891e0fe01cb4691cbbd9ecc0e17f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  building: {fileID: 2100000, guid: 93bfce25054eda846ae6f0d82dc3236c, type: 2}
 --- !u!114 &1527298773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1474cf6cafc98534fa2c1ce7470242bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roadMaterial: {fileID: 2100000, guid: fea5f4587f1345743aa0ca3cfa5e5045, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
