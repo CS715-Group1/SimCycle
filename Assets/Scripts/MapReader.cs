@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
 
-public class MapReader : MonoBehaviour
+class MapReader : MonoBehaviour
 {
-    Dictionary<ulong, OsmNode> nodes;
-    OsmBounds bounds;
-    List<OsmWay> ways;
+    [HideInInspector]
+    public Dictionary<ulong, OsmNode> nodes;
+
+    [HideInInspector]
+    public OsmBounds bounds;
+
+    [HideInInspector]
+    public List<OsmWay> ways;
 
     [Tooltip("The resource file that contains the OSM map data")]
     public string resourceFile;
+
+    public bool IsReady { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +33,8 @@ public class MapReader : MonoBehaviour
         SetBounds(doc.SelectSingleNode("/osm/bounds"));
         GetNodes(doc.SelectNodes("/osm/node"));
         GetWays(doc.SelectNodes("/osm/way"));
+
+        IsReady = true;
     }
 
     void Update()
