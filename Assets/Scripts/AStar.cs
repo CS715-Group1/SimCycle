@@ -15,7 +15,7 @@ public class AStar : MonoBehaviour
     }
 
 
-    public static List<Transform> AStarSearch(IntersectionGraph graph, Transform start, Transform goal)
+    public static List<Transform> AStarSearch(IntersectionGraph graph, Transform start, Transform goal,Transform behind)
     {
         var openSet = new PriorityQueue<Transform>();
         openSet.Enqueue(start, 0);
@@ -44,7 +44,13 @@ public class AStar : MonoBehaviour
 
             foreach (var neighbor in graph.GetNeighbors(current))
             {
+
                 float tentativeGScore = gScore[current] + graph.GetEdgeWeight(current, neighbor.Key);
+
+                if (current == start && neighbor.Key == behind)
+                {
+                    tentativeGScore += float.MaxValue;
+                }
 
                 if (tentativeGScore < gScore[neighbor.Key])
                 {

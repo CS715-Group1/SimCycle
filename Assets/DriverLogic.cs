@@ -15,6 +15,7 @@ public class DriverLogic : MonoBehaviour
     private void Start()
     {
         nodes.Add(temp);
+        nodes.Add(start);
     }
 
     public UnityEngine.Vector3 getNextNode()
@@ -23,7 +24,7 @@ public class DriverLogic : MonoBehaviour
         {
             Debug.Log("Finished");
             IntersectionGraph graph = IntersectionGraph._Instance;
-            nodes = AStar.AStarSearch(graph, nodes[counter-1], graph.GetRandomVertex(nodes[counter - 1]));
+            nodes = AStar.AStarSearch(graph, nodes[counter-1], graph.GetRandomVertex(nodes[counter - 1]), nodes[counter-2]);
             counter = 1;
         }
 

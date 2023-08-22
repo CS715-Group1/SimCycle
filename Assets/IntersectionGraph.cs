@@ -10,8 +10,6 @@ public class IntersectionGraph : MonoBehaviour
 {
     
     private Dictionary<Transform, Dictionary<Transform, float>> adjacencyList = new();
-    [SerializeField] private List<Transform> goals = new List<Transform>();
-    private int counter = 0;
 
     public static IntersectionGraph _Instance;
 
@@ -105,8 +103,16 @@ public class IntersectionGraph : MonoBehaviour
 
     public Transform GetRandomVertex(Transform exclusion)
     {
-        //int randomNumber = UnityEngine.Random.Range(0, adjacencyList.Keys.Count);
-            
-        return goals[counter++];
+
+        Transform vertex = exclusion;
+
+        while (vertex == exclusion)
+        {
+            int randomNumber = UnityEngine.Random.Range(0, adjacencyList.Keys.Count);
+            vertex = adjacencyList.Keys.ToList()[randomNumber];
+        }
+
+
+        return vertex;
     }
 }
