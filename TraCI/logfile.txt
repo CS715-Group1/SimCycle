@@ -1,14 +1,15 @@
-***Starting server on port 64103 ***
-Loading net-file from '../Sumo/Saves/tutorial1.net.xml' ... done (3ms).
+Warning: Environment variable SUMO_HOME is not set properly, disabling XML validation. Set 'auto' or 'always' for web lookups.
+***Starting server on port 64316 ***
+Loading net-file from '../Sumo/Saves/tutorial1.net.xml' ... done (2ms).
 Loading done.
-Simulation version 1.18.0 started with time: 0.00.
-Simulation ended at time: 10.00
+Simulation started with time: 0.00.
+Simulation ended at time: 100.00
 Reason: TraCI requested termination.
 Performance: 
- Duration: 0.01s
- TraCI-Duration: 0.01s
- Real time factor: 1428.57
- UPS: 1428.571429
+ Duration: 25.69s
+ TraCI-Duration: 0.07s
+ Real time factor: 3.89332
+ UPS: 3.893323
 Vehicles: 
  Inserted: 1
  Running: 1
