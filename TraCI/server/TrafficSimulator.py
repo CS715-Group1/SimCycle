@@ -44,6 +44,9 @@ class TrafficSimulator(object):
         for e in self.Edges:
             self.LinkShapes.append(traci.lane.getShape(e))
 
+    def StopSumo():
+        traci.stop()
+
     def RestartSumo(self, SumoObjects):
 
         #Restart the program

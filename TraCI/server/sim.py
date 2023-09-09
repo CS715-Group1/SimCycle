@@ -28,6 +28,14 @@ def step(id):
     session.step()
     return jsonify(message="Step simulation")
 
+@sim_bp.route('/stop/<id>', methods=['POST'])
+def stop(id):
+    if id not in SessionStore.sessions:
+        return jsonify(message="Cannot find session with id: " + id)
+    
+    session = SessionStore.sessions.get(id)
+    session.stop()
+    return jsonify(message="Stop simulation")
 
 
 # # Stop the SUMO simulation

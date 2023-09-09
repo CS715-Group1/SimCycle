@@ -17,6 +17,9 @@ class Session(object):
         #Update SUMO
         self.SumoObjects, self.TrafficLights = self.TrafficSim.StepSumo(self.SumoObjects, self.TrafficLights)
 
+    def stop(self):
+        self.TrafficSim.StopSumo()
+
     # def main(self):
 
     #     deltaT = 0.02
