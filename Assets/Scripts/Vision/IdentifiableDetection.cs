@@ -9,7 +9,9 @@ public class IdentifiableDetection : MonoBehaviour
     [SerializeField] float recognizableThreshold = 0.7f;
 
     [Header("Detection Settings")]
-    [SerializeField] int maxDimension = 640;
+    [SerializeField] Color detectedColor = Color.black;
+    [SerializeField] Color baseColor = Color.white;
+    [SerializeField] int maxDimension = 128;
 
     [Header("Debug")]
     [SerializeField] DisplayPlane blockedDisplay;
@@ -33,19 +35,19 @@ public class IdentifiableDetection : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.F))
         {
+            if (objIndex >= identifiableObjects.Length - 1)
+            {
+                objIndex = 0;
+            }
+            else
+            {
+                objIndex++;
+            }
+
             IdentifiableObject obj = identifiableObjects[objIndex];
             if (obj.isActiveAndEnabled)
             {
                 CheckVisibility(obj);
-            }
-
-
-            if (objIndex >= identifiableObjects.Length - 1)
-            {
-                objIndex = 0;
-            } else
-            {
-                objIndex++;
             }
         }
     }
@@ -67,30 +69,27 @@ public class IdentifiableDetection : MonoBehaviour
         texture.Apply();
 
 
-        // // TODO: restrict resolution of processed image
-        //float scaleFactor = 1;
+        // Restrict resolution of processed texture
+        // - Not scaling texture as raycasts depend on pixel/screen position
+        float scaleFactor = 1;
 
-        //if (m_cam.pixelWidth > maxDimension)
-        //{
-        //    scaleFactor = (float)maxDimension / m_cam.pixelWidth;
-        //}
-        //else if (m_cam.pixelHeight > maxDimension)
-        //{
-        //    scaleFactor = (float)maxDimension / m_cam.pixelWidth;
-        //}
-
-        //texture = ScaleTexture(texture, (int)(texture.width * scaleFactor), (int)(texture.height * scaleFactor));
-
-        //Debug.Log(texture.width + "," + texture.height);
+        if (m_cam.pixelWidth > maxDimension)
+        {
+            scaleFactor = (float)maxDimension / m_cam.pixelWidth;
+        }
+        else if (m_cam.pixelHeight > maxDimension)
+        {
+            scaleFactor = (float)maxDimension / m_cam.pixelWidth;
+        }
 
 
         Texture2D blockedVision = new(texture.width, texture.height);
         Texture2D perfectVision = new(texture.width, texture.height);
 
         // Loop through the pixels and check if the corresponding objects are in the "Identifiable" layer.
-        for (int y = 0; y < texture.height; y++)
+        for (int y = 0; y < texture.height; y += (int)(1 / scaleFactor) )
         {
-            for (int x = 0; x < texture.width; x++)
+            for (int x = 0; x < texture.width; x += (int)(1 / scaleFactor))
             {
                 blockedVision = FindBlockedIdentifiable(blockedVision, x, y, obj);
                 perfectVision = FindAllIdentifiable(perfectVision, x, y);
@@ -127,7 +126,7 @@ public class IdentifiableDetection : MonoBehaviour
 
     private Texture2D FindBlockedIdentifiable(Texture2D texture, int x, int y, IdentifiableObject obj)
     {
-        bool identified = false;
+        bool detected = false;
 
         // Raycast from the camera to the world point to determine the object's layer.
         Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
@@ -137,16 +136,16 @@ public class IdentifiableDetection : MonoBehaviour
             IdentifiableObject identifiableObject = hitInfo.collider.GetComponent<IdentifiableObject>();
 
             // TODO: check against mesh, not collider
-            identified = identifiableObject != null && identifiableObject.Equals(obj);
+            detected = identifiableObject != null && identifiableObject.Equals(obj);
         }
 
-        if (identified)
+        if (detected)
         {
-            texture.SetPixel(x, y, Color.white);
+            texture.SetPixel(x, y, detectedColor);
         }
         else
         {
-            texture.SetPixel(x, y, Color.black);
+            texture.SetPixel(x, y, baseColor);
         }
 
         return texture;
@@ -160,11 +159,11 @@ public class IdentifiableDetection : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Detecting")))
         {
             // TODO: check against mesh, not collider
-            texture.SetPixel(x, y, Color.white);
+            texture.SetPixel(x, y, detectedColor);
         }
         else
         {
-            texture.SetPixel(x, y, Color.black);
+            texture.SetPixel(x, y, baseColor);
         }
 
         return texture;
@@ -180,12 +179,12 @@ public class IdentifiableDetection : MonoBehaviour
 
         for (int i = 0; i < perfectPixels.Length; i++)
         {
-            if (perfectPixels[i] != Color.black)
+            if (perfectPixels[i] == detectedColor)
             {
                 total++;
             }
 
-            if (blockedPixels[i] != Color.black)
+            if (blockedPixels[i] == detectedColor)
             {
                 visible++;
             }
