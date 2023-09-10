@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class IdentifiableDetection : MonoBehaviour
 {
-    Camera m_cam;
     [SerializeField] LayerMask identifiableLayer;
 
-    [Header("Debug")]
-    [SerializeField] GameObject blocked;
-    [SerializeField] GameObject clear;
+    [Header("Vision Parameters")]
     [SerializeField] int maxDistance = 100;
-    [SerializeField] float scaleFactor = 1.0f; 
+    [SerializeField] float recognizableThreshold = 0.7f;
+
+    [Header("Debug")]
+    [SerializeField] DisplayPlane blockedDisplay;
+    [SerializeField] DisplayPlane perfectDisplay;
+
+    Camera m_cam;
 
     private void Start()
     {
@@ -23,7 +26,7 @@ public class IdentifiableDetection : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.F))
         {
 
-            ApplyTextureToPlane(DrawVisible(), blocked);
+            CheckVisibility();
             // FIXME: why does this only take the bottom left corner?
 
             //m_cam.cullingMask = LayerMask.GetMask("Car");
@@ -33,23 +36,16 @@ public class IdentifiableDetection : MonoBehaviour
             //Texture2D visionBlocked = ScreenCapture.CaptureScreenshotAsTexture();
 
 
-            //ApplyTextureToPlane(visionBlocked, blocked);
+            //ApplyTextureToPlane(visionBlocked, blockedDisplay);
             //ApplyTextureToPlane(visionClear, clear);
 
 
-            //if (CompareTexture(visionBlocked, visionClear, 0.7f))
-            //{
-            //    Debug.Log("Seen");
-            //}
-            //else
-            //{
-            //    Debug.Log("Not seen");
-            //}
+            
 
         }
     }
 
-    private Texture2D DrawVisible()
+    private void CheckVisibility()
     {
         RenderTexture rt = new(m_cam.pixelWidth, m_cam.pixelHeight, 1);
 
@@ -62,52 +58,88 @@ public class IdentifiableDetection : MonoBehaviour
         texture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
         texture.Apply();
 
-        // Create a new Texture2D to store the final result.
-        Texture2D resultTexture = new(texture.width, texture.height);
+        Texture2D blockedVision = new(texture.width, texture.height);
+        Texture2D perfectVision = new(texture.width, texture.height);
 
         // Loop through the pixels and check if the corresponding objects are in the "Identifiable" layer.
         for (int y = 0; y < texture.height; y++)
         {
             for (int x = 0; x < texture.width; x++)
             {
-                bool identified = false;
-                Color pixelColor = texture.GetPixel(x, y);
-
-                // Raycast from the camera to the world point to determine the object's layer.
-                Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
-
-                if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance))
-                {
-                    IdentifiableObject identifiableObject = hitInfo.collider.GetComponent<IdentifiableObject>();
-                    identified = identifiableObject != null;
-                }
-
-                if (identified)
-                {
-                    resultTexture.SetPixel(x, y, Color.white);
-                }
-                else
-                {
-                    // Make non-identifiable objects black
-                    resultTexture.SetPixel(x, y, Color.black);
-                }
+                blockedVision = FindBlockedIdentifiable(blockedVision, x, y);
+                perfectVision = FindAllIdentifiable(perfectVision, x, y);
             }
         }
 
         // Apply the changes to the result texture.
-        resultTexture.Apply();
+        blockedVision.Apply();
 
         // Clean up
         RenderTexture.active = null;
         rt.Release();
 
-        return resultTexture;
+
+        // Output Visibility
+        if (blockedDisplay != null) blockedDisplay.ApplyTexture(blockedVision);
+        if (perfectDisplay != null) perfectDisplay.ApplyTexture(perfectVision);
+
+        if (IsRecognizable(blockedVision, perfectVision, recognizableThreshold))
+        {
+            Debug.Log(m_cam.name + ": Recognized");
+        }
+        else
+        {
+            Debug.Log(m_cam.name + ": Not Recognized");
+        }
     }
 
-    private bool CompareTexture(Texture2D blocked, Texture2D clear, float percentage)
+    private Texture2D FindBlockedIdentifiable(Texture2D texture, int x, int y)
+    {
+        bool identified = false;
+
+        // Raycast from the camera to the world point to determine the object's layer.
+        Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance))
+        {
+            IdentifiableObject identifiableObject = hitInfo.collider.GetComponent<IdentifiableObject>();
+
+            identified = identifiableObject != null;
+        }
+
+        if (identified)
+        {
+            texture.SetPixel(x, y, Color.white);
+        }
+        else
+        {
+            texture.SetPixel(x, y, Color.black);
+        }
+
+        return texture;
+    }
+
+    private Texture2D FindAllIdentifiable(Texture2D texture, int x, int y)
+    {
+        // Raycast from the camera to the world point to determine the object's layer.
+        Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance, identifiableLayer))
+        {
+            texture.SetPixel(x, y, Color.white);
+        }
+        else
+        {
+            texture.SetPixel(x, y, Color.black);
+        }
+
+        return texture;
+    }
+
+    private bool IsRecognizable(Texture2D blockedDisplay, Texture2D clear, float threshold)
     {
         Color[] firstPix = clear.GetPixels();
-        Color[] secondPix = blocked.GetPixels();
+        Color[] secondPix = blockedDisplay.GetPixels();
         int visible = 0;
         int total = 0;
         for (int i = 0; i < firstPix.Length; i++)
@@ -123,40 +155,15 @@ public class IdentifiableDetection : MonoBehaviour
                 visible++;
             }
         }
-        Debug.Log(total);
-        Debug.Log(visible);
 
-        return ((visible / total) >= percentage);
-    }
-
-    private void ApplyTextureToPlane(Texture2D texture, GameObject obj)
-    {
-        if (obj != null)
+        if (total == 0)
         {
-            // Set the material's main texture
-            Material planeMaterial = obj.GetComponent<Renderer>().material;
-            planeMaterial.mainTexture = texture;
-
-            // Calculate the aspect ratio and adjust the plane's scale
-            float aspectRatio = (float)texture.width / texture.height;
-            obj.transform.localScale = new Vector3(scaleFactor * aspectRatio, 1, scaleFactor);
-
-
-
-
-            // Define the file path where you want to save the image
-            string filePath = Application.dataPath + "/Images/" + obj.name + ".png";
-
-            SaveImage(texture, filePath);
+            return false;
         }
-    }
 
-    private void SaveImage(Texture2D texture, string filePath)
-    {
-        // Convert the texture to a byte array in PNG format
-        byte[] bytes = texture.EncodeToPNG();
+        float percentage = (float)visible / total;
+        Debug.Log(percentage);
 
-        // Write the byte array to a file
-        System.IO.File.WriteAllBytes(filePath, bytes);
+        return percentage >= threshold;
     }
 }
