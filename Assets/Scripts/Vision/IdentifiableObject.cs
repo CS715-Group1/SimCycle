@@ -9,4 +9,9 @@ public class IdentifiableObject: MonoBehaviour
         int LayerIdentifiable = LayerMask.NameToLayer("Identifiable");
         gameObject.layer = LayerIdentifiable;
     }
+
+    private void Update()
+    {
+        
+    }
 }

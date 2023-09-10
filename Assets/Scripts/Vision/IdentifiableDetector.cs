@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdentifiableDetection : MonoBehaviour
+public class IdentifiableDetector : MonoBehaviour
 {
     [Header("Vision Parameters")]
     [SerializeField] int maxDistance = 100;
@@ -14,13 +14,13 @@ public class IdentifiableDetection : MonoBehaviour
     [SerializeField] int maxDimension = 128;
 
     [Header("Debug")]
+    public IdentifiableObject target;
     [SerializeField] DisplayPlane blockedDisplay;
     [SerializeField] DisplayPlane perfectDisplay;
 
-    [SerializeField] int objIndex;
-
     Camera m_cam;
     IdentifiableObject[] identifiableObjects;
+    int objIndex;
 
     private void Start()
     {
@@ -35,6 +35,9 @@ public class IdentifiableDetection : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.F))
         {
+            target = identifiableObjects[objIndex];
+            Debug.Log($"Targeting {target.name}");
+
             if (objIndex >= identifiableObjects.Length - 1)
             {
                 objIndex = 0;
@@ -43,12 +46,18 @@ public class IdentifiableDetection : MonoBehaviour
             {
                 objIndex++;
             }
+        }
+        else if (Input.GetKeyUp(KeyCode.E))
+        {
+            CheckTarget();
+        }
+    }
 
-            IdentifiableObject obj = identifiableObjects[objIndex];
-            if (obj.isActiveAndEnabled)
-            {
-                CheckVisibility(obj);
-            }
+    private void CheckTarget()
+    {
+        if (target != null && target.isActiveAndEnabled)
+        {
+            CheckVisibility(target);
         }
     }
 
