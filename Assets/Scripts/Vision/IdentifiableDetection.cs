@@ -10,6 +10,9 @@ public class IdentifiableDetection : MonoBehaviour
     [SerializeField] int maxDistance = 100;
     [SerializeField] float recognizableThreshold = 0.7f;
 
+    [Header("Detection Settings")]
+    [SerializeField] int maxDimension = 640;
+
     [Header("Debug")]
     [SerializeField] DisplayPlane blockedDisplay;
     [SerializeField] DisplayPlane perfectDisplay;
@@ -25,38 +28,41 @@ public class IdentifiableDetection : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.F))
         {
-
             CheckVisibility();
-            // FIXME: why does this only take the bottom left corner?
-
-            //m_cam.cullingMask = LayerMask.GetMask("Car");
-            //Texture2D visionClear = ScreenCapture.CaptureScreenshotAsTexture();
-
-            //m_cam.cullingMask = LayerMask.GetMask("Car") | LayerMask.GetMask("Wall");
-            //Texture2D visionBlocked = ScreenCapture.CaptureScreenshotAsTexture();
-
-
-            //ApplyTextureToPlane(visionBlocked, blockedDisplay);
-            //ApplyTextureToPlane(visionClear, clear);
-
-
-            
-
         }
     }
 
     private void CheckVisibility()
     {
-        RenderTexture rt = new(m_cam.pixelWidth, m_cam.pixelHeight, 1);
 
         // Set the camera's target texture to capture the scene.
         m_cam.Render();
+
+        RenderTexture rt = new(m_cam.pixelWidth, m_cam.pixelHeight, 1);
 
         // Create a new Texture2D and read the pixels from the RenderTexture.
         Texture2D texture = new(rt.width, rt.height);
         RenderTexture.active = rt;
         texture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
         texture.Apply();
+
+
+        // // TODO: restrict resolution of processed image
+        //float scaleFactor = 1;
+
+        //if (m_cam.pixelWidth > maxDimension)
+        //{
+        //    scaleFactor = (float)maxDimension / m_cam.pixelWidth;
+        //}
+        //else if (m_cam.pixelHeight > maxDimension)
+        //{
+        //    scaleFactor = (float)maxDimension / m_cam.pixelWidth;
+        //}
+
+        //texture = ScaleTexture(texture, (int)(texture.width * scaleFactor), (int)(texture.height * scaleFactor));
+
+        //Debug.Log(texture.width + "," + texture.height);
+
 
         Texture2D blockedVision = new(texture.width, texture.height);
         Texture2D perfectVision = new(texture.width, texture.height);
@@ -76,6 +82,7 @@ public class IdentifiableDetection : MonoBehaviour
 
         // Clean up
         RenderTexture.active = null;
+        m_cam.targetTexture = null;
         rt.Release();
 
 
@@ -165,5 +172,20 @@ public class IdentifiableDetection : MonoBehaviour
         Debug.Log(percentage);
 
         return percentage >= threshold;
+    }
+
+    private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+        Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, true);
+        Color[] rpixels = result.GetPixels(0);
+        float incX = (1.0f / (float)targetWidth);
+        float incY = (1.0f / (float)targetHeight);
+        for (int px = 0; px < rpixels.Length; px++)
+        {
+            rpixels[px] = source.GetPixelBilinear(incX * ((float)px % targetWidth), incY * ((float)Mathf.Floor(px / targetWidth)));
+        }
+        result.SetPixels(rpixels, 0);
+        result.Apply();
+        return result;
     }
 }
