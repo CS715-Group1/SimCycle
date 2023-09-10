@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class IdentifiableDetection : MonoBehaviour
 {
-    [SerializeField] LayerMask identifiableLayer;
-
     [Header("Vision Parameters")]
     [SerializeField] int maxDistance = 100;
     [SerializeField] float recognizableThreshold = 0.7f;
@@ -28,12 +26,20 @@ public class IdentifiableDetection : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.F))
         {
-            CheckVisibility();
+            // TODO: check for multiple
+            foreach (IdentifiableObject obj in Resources.FindObjectsOfTypeAll(typeof(IdentifiableObject)) as IdentifiableObject[])
+            {
+                if (!obj.isActiveAndEnabled) continue;
+
+                CheckVisibility(obj);
+            }
         }
     }
 
-    private void CheckVisibility()
+    private void CheckVisibility(IdentifiableObject obj)
     {
+        // Isolate object for detection
+        obj.gameObject.layer = LayerMask.NameToLayer("Detecting");
 
         // Set the camera's target texture to capture the scene.
         m_cam.Render();
@@ -72,13 +78,14 @@ public class IdentifiableDetection : MonoBehaviour
         {
             for (int x = 0; x < texture.width; x++)
             {
-                blockedVision = FindBlockedIdentifiable(blockedVision, x, y);
+                blockedVision = FindBlockedIdentifiable(blockedVision, x, y, obj);
                 perfectVision = FindAllIdentifiable(perfectVision, x, y);
             }
         }
 
         // Apply the changes to the result texture.
         blockedVision.Apply();
+        perfectVision.Apply();
 
         // Clean up
         RenderTexture.active = null;
@@ -92,15 +99,19 @@ public class IdentifiableDetection : MonoBehaviour
 
         if (IsRecognizable(blockedVision, perfectVision, recognizableThreshold))
         {
-            Debug.Log(m_cam.name + ": Recognized");
+            Debug.Log($"Camera '{m_cam.name}' recognized object '{obj.name}'");
         }
         else
         {
-            Debug.Log(m_cam.name + ": Not Recognized");
+            Debug.Log($"Camera '{m_cam.name}' did not recognize object '{obj.name}'");
         }
+
+        // Finished detection, remove object from isolation
+        // FIXME: seems to immediately set even before code above has run.
+        obj.gameObject.layer = LayerMask.NameToLayer("Identifiable");
     }
 
-    private Texture2D FindBlockedIdentifiable(Texture2D texture, int x, int y)
+    private Texture2D FindBlockedIdentifiable(Texture2D texture, int x, int y, IdentifiableObject obj)
     {
         bool identified = false;
 
@@ -111,7 +122,7 @@ public class IdentifiableDetection : MonoBehaviour
         {
             IdentifiableObject identifiableObject = hitInfo.collider.GetComponent<IdentifiableObject>();
 
-            identified = identifiableObject != null;
+            identified = identifiableObject != null && identifiableObject.Equals(obj);
         }
 
         if (identified)
@@ -131,7 +142,7 @@ public class IdentifiableDetection : MonoBehaviour
         // Raycast from the camera to the world point to determine the object's layer.
         Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance, identifiableLayer))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Detecting")))
         {
             texture.SetPixel(x, y, Color.white);
         }
@@ -143,35 +154,37 @@ public class IdentifiableDetection : MonoBehaviour
         return texture;
     }
 
-    private bool IsRecognizable(Texture2D blockedDisplay, Texture2D clear, float threshold)
+    private bool IsRecognizable(Texture2D blockedVision, Texture2D perfectVision, float threshold)
     {
-        Color[] firstPix = clear.GetPixels();
-        Color[] secondPix = blockedDisplay.GetPixels();
+        Color[] perfectPixels = perfectVision.GetPixels();
+        Color[] blockedPixels = blockedVision.GetPixels();
+
         int visible = 0;
         int total = 0;
-        for (int i = 0; i < firstPix.Length; i++)
-        {
 
-            if (firstPix[i] != Color.black)
+        for (int i = 0; i < perfectPixels.Length; i++)
+        {
+            if (perfectPixels[i] != Color.black)
             {
                 total++;
             }
 
-            if (secondPix[i] != Color.black)
+            if (blockedPixels[i] != Color.black)
             {
                 visible++;
             }
         }
+
+        float ratio = (float)visible / total;
+
+        Debug.Log($"Visible: {visible} / Total: {total} = {ratio}");
 
         if (total == 0)
         {
             return false;
         }
 
-        float percentage = (float)visible / total;
-        Debug.Log(percentage);
-
-        return percentage >= threshold;
+        return ratio >= threshold;
     }
 
     private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
