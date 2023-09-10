@@ -15,23 +15,37 @@ public class IdentifiableDetection : MonoBehaviour
     [SerializeField] DisplayPlane blockedDisplay;
     [SerializeField] DisplayPlane perfectDisplay;
 
+    [SerializeField] int objIndex;
+
     Camera m_cam;
+    IdentifiableObject[] identifiableObjects;
 
     private void Start()
     {
         m_cam = GetComponent<Camera>();
+
+        identifiableObjects = Resources.FindObjectsOfTypeAll(typeof(IdentifiableObject)) as IdentifiableObject[];
+
+        objIndex = 0;
     }
 
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.F))
         {
-            // TODO: check for multiple
-            foreach (IdentifiableObject obj in Resources.FindObjectsOfTypeAll(typeof(IdentifiableObject)) as IdentifiableObject[])
+            IdentifiableObject obj = identifiableObjects[objIndex];
+            if (obj.isActiveAndEnabled)
             {
-                if (!obj.isActiveAndEnabled) continue;
-
                 CheckVisibility(obj);
+            }
+
+
+            if (objIndex >= identifiableObjects.Length - 1)
+            {
+                objIndex = 0;
+            } else
+            {
+                objIndex++;
             }
         }
     }
@@ -122,6 +136,7 @@ public class IdentifiableDetection : MonoBehaviour
         {
             IdentifiableObject identifiableObject = hitInfo.collider.GetComponent<IdentifiableObject>();
 
+            // TODO: check against mesh, not collider
             identified = identifiableObject != null && identifiableObject.Equals(obj);
         }
 
@@ -144,6 +159,7 @@ public class IdentifiableDetection : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Detecting")))
         {
+            // TODO: check against mesh, not collider
             texture.SetPixel(x, y, Color.white);
         }
         else
