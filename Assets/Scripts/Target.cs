@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Edge : MonoBehaviour
+public class Target : MonoBehaviour
 {
-    int weight;
-    Node node;
+    public bool OpenForConnection;
 }
