@@ -9,7 +9,7 @@ public class CarAI : MonoBehaviour
 {
     [SerializeField] List<Vector3> path = null;
 
-    [SerializeField] private float arriveDistance = .3f, lastPointArriveDistance = .1f;
+    [SerializeField] private float arriveDistance = 2f, lastPointArriveDistance = .1f;
     [SerializeField] private float turningAngleOffest = 5;
     [SerializeField] private Vector3 currentTargetPosition;
 
@@ -68,16 +68,22 @@ public class CarAI : MonoBehaviour
 
     private void CheckIfArrived()
     {
-        if(Stop == false)
+        
+
+
+        if (Stop == false)
         {
             var distanceToCheck = arriveDistance;
-            if(index == path.Count - 1)
+            Debug.Log(Vector3.Distance(currentTargetPosition, transform.position));
+            if (index == path.Count - 1)
             {
+
+                Debug.Log("Why would it");
                 distanceToCheck = lastPointArriveDistance;
             } 
-            if(Vector3.Distance(currentTargetPosition, transform.position) > distanceToCheck)
+            if(Vector3.Distance(currentTargetPosition, transform.position) < distanceToCheck)
             {
-                Debug.Log("Path part " + index);
+                
                 SetNextTargetIndex();
             }
         }
@@ -95,6 +101,7 @@ public class CarAI : MonoBehaviour
         else
         {
             currentTargetPosition = path[index];
+            Debug.Log(currentTargetPosition.ToString());
         }
     }
 
@@ -108,17 +115,26 @@ public class CarAI : MonoBehaviour
         {
             Vector3 relativePoint = transform.InverseTransformPoint(currentTargetPosition);
             float angle = Mathf.Atan2(relativePoint.x, relativePoint.z) * Mathf.Rad2Deg;
+            //Debug.Log(angle.ToString());
+
             var rotateCar = 0;
             if (angle > turningAngleOffest)
             {
                 rotateCar = 1;
-            } else if (angle < turningAngleOffest)
+            } else if (angle < -turningAngleOffest)
             {
                 rotateCar = -1;
             }
 
             OnDrive?.Invoke(new Vector2(rotateCar, 1));
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+
+        Gizmos.DrawCube(currentTargetPosition, Vector3.one);
     }
 
 }

@@ -38,13 +38,14 @@ public class AIDirector : MonoBehaviour
         List<Transform> vertexPath = AStar.AStarSearch(graph, start, end, null);
         path = graph.TransformToTargetPath(vertexPath);
 
-        var car = Instantiate(carPrefab, start.position + new Vector3(3.5f,0.1f,3.5f), Quaternion.identity);
+        var car = Instantiate(carPrefab, path[0], Quaternion.identity);
         car.GetComponent<CarAI>().SetPath(path);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
+
 
         for (int i = 0; i < path.Count - 1; i++)
         {

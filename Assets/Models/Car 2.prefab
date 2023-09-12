@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3330732}
   - component: {fileID: 2339998}
   - component: {fileID: 6433206}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car_2_Wheel_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 3391686}
   - component: {fileID: 2397922}
   - component: {fileID: 6469200}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car_2_Wheel_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 3319708}
   - component: {fileID: 2365520}
   - component: {fileID: 6447554}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car_2_Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 3368688}
   - component: {fileID: 2387314}
   - component: {fileID: 6445910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car_2_Wheel_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 3368378}
   - component: {fileID: 2331914}
   - component: {fileID: 6482932}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car_2_Wheel_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -545,9 +545,9 @@ GameObject:
   - component: {fileID: 4695636838187809310}
   - component: {fileID: 5227575805526700131}
   - component: {fileID: 4368056530435990626}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 2
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -653,8 +653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 178c4dbd1a208a44ea7a31f5227a4670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  power: 5
-  torque: 0.5
+  power: 10
+  torque: 10
   maxSpeed: 5
   movementVector: {x: 0, y: 0}
 --- !u!114 &4368056530435990626
@@ -670,8 +670,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: []
-  arriveDistance: 0.2
-  lastPointArriveDistance: 0.1
+  arriveDistance: 2
+  lastPointArriveDistance: 1
   turningAngleOffest: 5
   currentTargetPosition: {x: 0, y: 0, z: 0}
   <OnDrive>k__BackingField:

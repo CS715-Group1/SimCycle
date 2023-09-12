@@ -122,15 +122,7 @@ public class IntersectionGraph : MonoBehaviour
         return path;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
 
-        for (int i = 0;i < path.Count-1; i++)
-        {
-            Gizmos.DrawLine(path[i], path[i+1]);
-        }
-    }
 
     private void OnDrawGizmosSelected()
     {
