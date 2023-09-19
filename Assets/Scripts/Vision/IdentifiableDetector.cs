@@ -14,62 +14,38 @@ public class IdentifiableDetector : MonoBehaviour
     [SerializeField] int maxDimension = 128;
 
     [Header("Debug")]
-    public IdentifiableObject target;
     [SerializeField] DisplayPlane blockedDisplay;
     [SerializeField] DisplayPlane perfectDisplay;
 
-    Camera m_cam;
-    IdentifiableObject[] identifiableObjects;
-    int objIndex;
+    new Camera camera;
 
     private void Start()
     {
-        m_cam = GetComponent<Camera>();
-
-        identifiableObjects = Resources.FindObjectsOfTypeAll(typeof(IdentifiableObject)) as IdentifiableObject[];
-
-        objIndex = 0;
+        camera = GetComponent<Camera>();
     }
 
-    private void Update()
+    public List<IdentifiableObject> GetVisible(IdentifiableObject[] objects)
     {
-        if (Input.GetKeyUp(KeyCode.F))
-        {
-            target = identifiableObjects[objIndex];
-            Debug.Log($"Targeting {target.name}");
+        List<IdentifiableObject> visibleObjects = new();
 
-            if (objIndex >= identifiableObjects.Length - 1)
-            {
-                objIndex = 0;
-            }
-            else
-            {
-                objIndex++;
-            }
-        }
-        else if (Input.GetKeyUp(KeyCode.E))
+        foreach (IdentifiableObject obj in objects)
         {
-            CheckTarget();
+            if (obj == null || !obj.isActiveAndEnabled) continue;
+
+            if (CheckVisibility(obj)) visibleObjects.Add(obj);
         }
+        return visibleObjects;
     }
 
-    private void CheckTarget()
-    {
-        if (target != null && target.isActiveAndEnabled)
-        {
-            CheckVisibility(target);
-        }
-    }
-
-    private void CheckVisibility(IdentifiableObject obj)
+    private bool CheckVisibility(IdentifiableObject obj)
     {
         // Isolate object for detection
         obj.gameObject.layer = LayerMask.NameToLayer("Detecting");
 
         // Set the camera's target texture to capture the scene.
-        m_cam.Render();
+        camera.Render();
 
-        RenderTexture rt = new(m_cam.pixelWidth, m_cam.pixelHeight, 1);
+        RenderTexture rt = new(camera.pixelWidth, camera.pixelHeight, 1);
 
         // Create a new Texture2D and read the pixels from the RenderTexture.
         Texture2D texture = new(rt.width, rt.height);
@@ -82,13 +58,13 @@ public class IdentifiableDetector : MonoBehaviour
         // - Not scaling texture as raycasts depend on pixel/screen position
         float scaleFactor = 1;
 
-        if (m_cam.pixelWidth > maxDimension)
+        if (camera.pixelWidth > maxDimension)
         {
-            scaleFactor = (float)maxDimension / m_cam.pixelWidth;
+            scaleFactor = (float)maxDimension / camera.pixelWidth;
         }
-        else if (m_cam.pixelHeight > maxDimension)
+        else if (camera.pixelHeight > maxDimension)
         {
-            scaleFactor = (float)maxDimension / m_cam.pixelWidth;
+            scaleFactor = (float)maxDimension / camera.pixelWidth;
         }
 
 
@@ -96,7 +72,7 @@ public class IdentifiableDetector : MonoBehaviour
         Texture2D perfectVision = new(texture.width, texture.height);
 
         // Loop through the pixels and check if the corresponding objects are in the "Identifiable" layer.
-        for (int y = 0; y < texture.height; y += (int)(1 / scaleFactor) )
+        for (int y = 0; y < texture.height; y += (int)(1 / scaleFactor))
         {
             for (int x = 0; x < texture.width; x += (int)(1 / scaleFactor))
             {
@@ -111,26 +87,22 @@ public class IdentifiableDetector : MonoBehaviour
 
         // Clean up
         RenderTexture.active = null;
-        m_cam.targetTexture = null;
+        camera.targetTexture = null;
         rt.Release();
+
+        // Finished detection, remove object from isolation
+        obj.gameObject.layer = LayerMask.NameToLayer("Identifiable");
 
 
         // Output Visibility
         if (blockedDisplay != null) blockedDisplay.ApplyTexture(blockedVision);
         if (perfectDisplay != null) perfectDisplay.ApplyTexture(perfectVision);
 
-        if (IsRecognizable(blockedVision, perfectVision, recognizableThreshold))
-        {
-            Debug.Log($"Camera '{m_cam.name}' recognized object '{obj.name}'");
-        }
-        else
-        {
-            Debug.Log($"Camera '{m_cam.name}' did not recognize object '{obj.name}'");
-        }
+        bool isVisible = IsRecognizable(blockedVision, perfectVision, recognizableThreshold);
 
-        // Finished detection, remove object from isolation
-        // FIXME: seems to immediately set even before code above has run.
-        obj.gameObject.layer = LayerMask.NameToLayer("Identifiable");
+        //ReportVisibility(obj, isVisible);
+
+        return isVisible;
     }
 
     private Texture2D FindBlockedIdentifiable(Texture2D texture, int x, int y, IdentifiableObject obj)
@@ -138,7 +110,7 @@ public class IdentifiableDetector : MonoBehaviour
         bool detected = false;
 
         // Raycast from the camera to the world point to determine the object's layer.
-        Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
+        Ray ray = camera.ScreenPointToRay(new Vector3(x, y, 0));
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance))
         {
@@ -163,7 +135,7 @@ public class IdentifiableDetector : MonoBehaviour
     private Texture2D FindAllIdentifiable(Texture2D texture, int x, int y)
     {
         // Raycast from the camera to the world point to determine the object's layer.
-        Ray ray = m_cam.ScreenPointToRay(new Vector3(x, y, 0));
+        Ray ray = camera.ScreenPointToRay(new Vector3(x, y, 0));
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, LayerMask.GetMask("Detecting")))
         {
@@ -201,7 +173,7 @@ public class IdentifiableDetector : MonoBehaviour
 
         float ratio = (float)visible / total;
 
-        Debug.Log($"Visible: {visible} / Total: {total} = {ratio}");
+        //Debug.Log($"Visible: {visible} / Total: {total} = {ratio}");
 
         if (total == 0)
         {
@@ -224,5 +196,17 @@ public class IdentifiableDetector : MonoBehaviour
         result.SetPixels(rpixels, 0);
         result.Apply();
         return result;
+    }
+
+    private void ReportVisibility(IdentifiableObject obj, bool isVisible)
+    {
+        if (isVisible)
+        {
+            Debug.Log($"Camera '{camera.name}' recognized object '{obj.name}'");
+        }
+        else
+        {
+            Debug.Log($"Camera '{camera.name}' did not recognize object '{obj.name}'");
+        }
     }
 }
