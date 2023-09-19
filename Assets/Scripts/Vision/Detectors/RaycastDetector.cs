@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaycastDetector : MonoBehaviour, IDetector
+public class RaycastDetector : IDetector
 {
     [Header("Vision Parameters")]
     [SerializeField] int maxDistance = 100;
@@ -24,7 +24,14 @@ public class RaycastDetector : MonoBehaviour, IDetector
         camera = GetComponent<Camera>();
     }
 
-    public List<IdentifiableObject> GetVisible(IdentifiableObject[] objects)
+    public override bool IsObjectVisible(IdentifiableObject obj)
+    {
+        // TODO: implement check if object has any pixels visible at all.
+        // FIXME: optimise, e.g: non-raycast method, or very targeted raycast
+        return obj;
+    }
+
+    public override List<IdentifiableObject> GetVisible(IdentifiableObject[] objects)
     {
         List<IdentifiableObject> visibleObjects = new();
 
@@ -32,12 +39,26 @@ public class RaycastDetector : MonoBehaviour, IDetector
         {
             if (obj == null || !obj.isActiveAndEnabled) continue;
 
-            if (CheckVisibility(obj)) visibleObjects.Add(obj);
+            if (IsObjectVisible(obj)) visibleObjects.Add(obj);
         }
+
         return visibleObjects;
     }
 
-    private bool CheckVisibility(IdentifiableObject obj)
+    public override List<IdentifiableObject> GetRecognisable(IdentifiableObject[] objects)
+    {
+        List<IdentifiableObject> recognisableObjects = new();
+
+        foreach (IdentifiableObject obj in objects)
+        {
+            if (obj == null || !obj.isActiveAndEnabled) continue;
+
+            if (IsObjectRecognisable(obj)) recognisableObjects.Add(obj);
+        }
+        return recognisableObjects;
+    }
+
+    public override bool IsObjectRecognisable(IdentifiableObject obj)
     {
         // Isolate object for detection
         obj.gameObject.layer = LayerMask.NameToLayer("Detecting");
@@ -98,11 +119,11 @@ public class RaycastDetector : MonoBehaviour, IDetector
         if (blockedDisplay != null) blockedDisplay.ApplyTexture(blockedVision);
         if (perfectDisplay != null) perfectDisplay.ApplyTexture(perfectVision);
 
-        bool isVisible = IsRecognizable(blockedVision, perfectVision, recognizableThreshold);
+        bool isRecognisable = IsRecognizable(blockedVision, perfectVision, recognizableThreshold);
 
-        //ReportVisibility(obj, isVisible);
+        //ReportVisibility(obj, isRecognisable);
 
-        return isVisible;
+        return isRecognisable;
     }
 
     private Texture2D FindBlockedIdentifiable(Texture2D texture, int x, int y, IdentifiableObject obj)
@@ -155,7 +176,7 @@ public class RaycastDetector : MonoBehaviour, IDetector
         Color[] perfectPixels = perfectVision.GetPixels();
         Color[] blockedPixels = blockedVision.GetPixels();
 
-        int visible = 0;
+        int recognisable = 0;
         int total = 0;
 
         for (int i = 0; i < perfectPixels.Length; i++)
@@ -167,13 +188,13 @@ public class RaycastDetector : MonoBehaviour, IDetector
 
             if (blockedPixels[i] == detectedColor)
             {
-                visible++;
+                recognisable++;
             }
         }
 
-        float ratio = (float)visible / total;
+        float ratio = (float)recognisable / total;
 
-        //Debug.Log($"Visible: {visible} / Total: {total} = {ratio}");
+        //Debug.Log($"Recognisable: {recognisable} / Total: {total} = {ratio}");
 
         if (total == 0)
         {
@@ -198,9 +219,9 @@ public class RaycastDetector : MonoBehaviour, IDetector
         return result;
     }
 
-    private void ReportVisibility(IdentifiableObject obj, bool isVisible)
+    private void ReportVisibility(IdentifiableObject obj, bool isRecognisable)
     {
-        if (isVisible)
+        if (isRecognisable)
         {
             Debug.Log($"Camera '{camera.name}' recognized object '{obj.name}'");
         }
