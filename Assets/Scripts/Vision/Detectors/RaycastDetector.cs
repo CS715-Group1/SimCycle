@@ -17,7 +17,7 @@ public class RaycastDetector : IDetector
     [SerializeField] DisplayPlane blockedDisplay;
     [SerializeField] DisplayPlane perfectDisplay;
 
-    new Camera camera;
+    public new Camera camera { get; private set; }
 
     private void Start()
     {

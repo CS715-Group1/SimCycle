@@ -25,7 +25,7 @@ public class AgentVisionController : MonoBehaviour
 
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         // Keep reaction time above minimum
         reactionTime = Mathf.Max(reactionTime, MIN_REACTION_TIME);
@@ -33,6 +33,14 @@ public class AgentVisionController : MonoBehaviour
         recognisableObjects = new();
 
         InvokeRepeating(nameof(Step), 0, reactionTime);  // Start after 1s, repeat every 1s
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (IdentifiableObject obj in recognisableObjects)
+        {
+            Debug.DrawLine(detector.camera.transform.position, obj.transform.position, Color.green);
+        }
     }
 
     // Advance one simulation step
