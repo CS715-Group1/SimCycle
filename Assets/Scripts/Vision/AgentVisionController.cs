@@ -14,7 +14,7 @@ public class AgentVisionController : MonoBehaviour
     /// </summary>
     [SerializeField] float reactionTime = 5;
 
-    public List<IdentifiableObject> visibleObjects { get; private set; }
+    public List<IdentifiableObject> recognisableObjects { get; private set; }
 
     int step = 0;
 
@@ -30,7 +30,7 @@ public class AgentVisionController : MonoBehaviour
         // Keep reaction time above minimum
         reactionTime = Mathf.Max(reactionTime, MIN_REACTION_TIME);
 
-        visibleObjects = new();
+        recognisableObjects = new();
 
         InvokeRepeating(nameof(Step), 0, reactionTime);  // Start after 1s, repeat every 1s
     }
@@ -46,9 +46,11 @@ public class AgentVisionController : MonoBehaviour
         IdentifiableObject[] identifiableObjects = Resources.FindObjectsOfTypeAll(
             typeof(IdentifiableObject)) as IdentifiableObject[];
 
-        visibleObjects = detector.GetVisible(identifiableObjects);
+        IdentifiableObject[] visibleObjects = detector.GetVisible(identifiableObjects).ToArray();
 
-        foreach (IdentifiableObject obj in visibleObjects)
+        recognisableObjects = detector.GetRecognisable(visibleObjects);
+
+        foreach (IdentifiableObject obj in recognisableObjects)
         {
             Debug.Log($"{name} sees: {obj.name}");
         }
