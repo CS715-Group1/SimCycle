@@ -12,7 +12,7 @@ public class IDMController2 : MonoBehaviour
     public float maxSpeed = 20.0f; // Maximum speed
 
     private Transform targetVehicle; // The vehicle in front
-    private float maxDetectionDistance = 10.0f;
+    private float maxDetectionDistance = 100.0f;
     private Rigidbody rb;
 
     private void Start()
@@ -25,7 +25,7 @@ public class IDMController2 : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, maxDetectionDistance))
         {
-            if (hit.collider.CompareTag("Vehicle"))
+            if (hit.collider.CompareTag("Car"))
             {
                 // The hit.collider is the vehicle in front.
                 Transform frontVehicle = hit.collider.transform;
@@ -33,8 +33,23 @@ public class IDMController2 : MonoBehaviour
             }
         }
 
-        float carAcceleration = CalculateAcceleration();
-        UpdateVelocity(carAcceleration);
+        // Check if targetVehicle is not null before using it
+        if (targetVehicle != null)
+        {
+            float carAcceleration = CalculateAcceleration();
+            UpdateVelocity(carAcceleration);
+        }
+        else
+        {
+            // If targetVehicle is null, you can implement some default behavior.
+
+            // Update the vehicle's velocity
+            rb.velocity += transform.forward * acceleration * Time.deltaTime;
+
+            // Clamp the velocity to the maximum speed
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+            // rb.velocity = Vector3.zero;
+        }
     }
 
     private float CalculateAcceleration()
