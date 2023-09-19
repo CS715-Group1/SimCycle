@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class IDMController : MonoBehaviour
 {
-    public float maxSpeed = 10f;
-    public float maxAcceleration = 2f;
-    public float desiredSpeed = 5f;
-    public float minDistance = 2f;
-    public float timeHeadway = 1.5f;
+    public float desiredSpeed = 20.0f; // Desired speed of the vehicle
+    public float timeGap = 1.5f; // Time gap to the vehicle in front
+    public float minDistance = 2.0f; // Minimum following distance
+    public float acceleration = 2.0f; // Maximum acceleration
+    public float deceleration = 3.0f; // Maximum deceleration
+    public float maxSpeed = 20.0f; // Maximum speed
 
+    private Transform targetVehicle; // The vehicle in front
+    private float maxDetectionDistance = 50.0f;
     private Rigidbody rb;
 
     private void Start()
@@ -17,41 +20,55 @@ public class IDMController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        // Calculate acceleration based on IDM
-        float acceleration = CalculateIDMAcceleration();
-
-        // Update the vehicle's velocity and position
-        UpdateVelocity(acceleration);
-    }
-
-    private float CalculateIDMAcceleration()
-    {
-        // Calculate the distance to the vehicle in front
-        // Might replace this with vision
         RaycastHit hit;
-        float distanceToVehicleInFront = float.MaxValue;
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, minDistance * 2))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, maxDetectionDistance))
         {
-            distanceToVehicleInFront = hit.distance;
+            if (hit.collider.CompareTag("Car"))
+            {
+                // The hit.collider is the vehicle in front.
+                targetVehicle = hit.collider.transform;
+            }
         }
 
-        // IDM acceleration formula
-        float acceleration = maxAcceleration * (1 - Mathf.Pow(rb.velocity.magnitude / maxSpeed, 4)) -
-                             Mathf.Pow(desiredSpeed / Mathf.Max(distanceToVehicleInFront, 0.1f), 2);
-
-        return acceleration;
+        // Check if targetVehicle is not null before using it
+        if (targetVehicle != null)
+        {
+            float carAcceleration = CalculateAcceleration();
+            UpdateVelocity(carAcceleration);
+        }
+        else
+        {
+            // If targetVehicle is null, can implement some default behavior.
+            UpdateVelocity(acceleration);
+            // rb.velocity = Vector3.zero;
+        }
     }
 
-    private void UpdateVelocity(float acceleration)
+    private float CalculateAcceleration()
+    {
+        float deltaSpeed = rb.velocity.magnitude - targetVehicle.GetComponent<Rigidbody>().velocity.magnitude;
+        float desiredDistance = minDistance + Mathf.Max(0, rb.velocity.magnitude * timeGap + (rb.velocity.magnitude * deltaSpeed) / (2 * Mathf.Sqrt(acceleration * deceleration)));
+        float distance = Vector3.Distance(transform.position, targetVehicle.position);
+
+        float desiredAcceleration = acceleration * (1 - Mathf.Pow(rb.velocity.magnitude / desiredSpeed, 4) - Mathf.Pow(desiredDistance / distance, 2));
+        desiredAcceleration = Mathf.Clamp(desiredAcceleration, -deceleration, acceleration);
+
+        return desiredAcceleration;
+    }
+
+    private void UpdateVelocity(float carAcceleration)
     {
         // Update the vehicle's velocity
-        rb.velocity += transform.forward * acceleration * Time.deltaTime;
+        rb.velocity += transform.forward * carAcceleration * Time.deltaTime;
 
         // Clamp the velocity to the maximum speed
         rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
     }
-}
 
+    // public void SetTargetVehicle(Transform target)
+    // {
+    //     targetVehicle = target;
+    // }
+}

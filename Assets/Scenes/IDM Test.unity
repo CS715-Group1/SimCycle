@@ -269,6 +269,7 @@ MonoBehaviour:
   desiredSpeed: 5
   minDistance: 2
   timeHeadway: 1.5
+  rb: {fileID: 0}
 --- !u!114 &420781002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1219,7 +1220,6 @@ GameObject:
   - component: {fileID: 1999376871}
   - component: {fileID: 1999376870}
   - component: {fileID: 1999376874}
-  - component: {fileID: 1999376876}
   - component: {fileID: 1999376875}
   m_Layer: 0
   m_Name: Cube
@@ -1359,23 +1359,6 @@ MonoBehaviour:
   acceleration: 2
   deceleration: 3
   maxSpeed: 20
---- !u!114 &1999376876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1999376868}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b35fa3ef2f88c6b41aa36ce999105122, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 10
-  maxAcceleration: 2
-  desiredSpeed: 5
-  minDistance: 2
-  timeHeadway: 1.5
 --- !u!1001 &2001559360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1526,6 +1509,7 @@ MonoBehaviour:
   desiredSpeed: 5
   minDistance: 2
   timeHeadway: 1.5
+  rb: {fileID: 0}
 --- !u!114 &2016782104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1557,7 +1541,6 @@ GameObject:
   - component: {fileID: 2017473002}
   - component: {fileID: 2017473001}
   - component: {fileID: 2017473005}
-  - component: {fileID: 2017473007}
   - component: {fileID: 2017473006}
   m_Layer: 0
   m_Name: Cube (1)
@@ -1646,7 +1629,7 @@ Transform:
   m_GameObject: {fileID: 2017472999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.48, y: 0.66, z: 31.04}
+  m_LocalPosition: {x: 1.48, y: 0.66, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1686,7 +1669,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017472999}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b42f401f6a59904fa191b29d585001d, type: 3}
   m_Name: 
@@ -1697,23 +1680,6 @@ MonoBehaviour:
   acceleration: 2
   deceleration: 3
   maxSpeed: 20
---- !u!114 &2017473007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2017472999}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b35fa3ef2f88c6b41aa36ce999105122, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 10
-  maxAcceleration: 2
-  desiredSpeed: 5
-  minDistance: 2
-  timeHeadway: 1.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
