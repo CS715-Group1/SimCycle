@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class AgentVisionController : MonoBehaviour
 {
-    [SerializeField] IdentifiableDetector detector;
+    [SerializeField] RaycastDetector detector;
 
     /// <summary>
     /// Reaction time in seconds

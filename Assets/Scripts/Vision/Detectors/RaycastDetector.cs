@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdentifiableDetector : MonoBehaviour
+public class RaycastDetector : MonoBehaviour, IDetector
 {
     [Header("Vision Parameters")]
     [SerializeField] int maxDistance = 100;

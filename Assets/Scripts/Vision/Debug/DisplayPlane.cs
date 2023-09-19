@@ -22,7 +22,7 @@ public class DisplayPlane : MonoBehaviour
         // Define the file path where you want to save the image
         string filePath = Application.dataPath + "/Images/" + name + ".png";
 
-        SaveImage(texture, filePath);
+        //SaveImage(texture, filePath);
     }
 
     private void SaveImage(Texture2D texture, string filePath)
