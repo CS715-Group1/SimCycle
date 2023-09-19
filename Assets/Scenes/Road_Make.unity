@@ -582,6 +582,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: 63.570045
@@ -1028,6 +1032,10 @@ PrefabInstance:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
       value: Road Cross Road (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3897,6 +3905,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.39
@@ -4072,6 +4084,10 @@ PrefabInstance:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
       value: Road Cross Road (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5617,6 +5633,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.120022
@@ -5930,6 +5950,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.100025
@@ -6059,6 +6083,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.380005
@@ -6136,6 +6164,10 @@ PrefabInstance:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
       value: Road Cross Road (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7584,6 +7616,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.39
@@ -8636,6 +8672,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Road Cross Road (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x
       value: -48.890015
@@ -8825,6 +8865,10 @@ PrefabInstance:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
       value: Road Cross Road (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.x

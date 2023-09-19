@@ -44,7 +44,7 @@ public class RoadSection : MonoBehaviour
                 lane.AddToStart(connection.intersection.GetNearestTarget(lane.GetLaneStart().position));
                 lane.AddTarget(connections[opposingConnectionNum].intersection.GetNearestTarget(lane.lastTarget().position));
 
-                Edge edge = new(lane.ToPath(), weight, connections[opposingConnectionNum].intersection.transform);
+                Edge edge = new(lane.GetTargets(), weight, connections[opposingConnectionNum].intersection.transform);
                 connection.intersection.AddEdge(edge);
 
                 lanes.Add(lane);
@@ -78,6 +78,11 @@ public class RoadSection : MonoBehaviour
                     }
                 }
 
+            }
+
+            if(i == sectionNumber - 2)
+            {
+                //nextTarget.laneEnd = true;
             }
 
             lane.AddTarget(nextTarget);

@@ -84,7 +84,7 @@ GameObject:
   m_Layer: 0
   m_Name: Out Target
   m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OpenForConnection: 1
+  laneEnd: 0
 --- !u!1 &6070086457803689668
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +130,7 @@ GameObject:
   m_Layer: 0
   m_Name: ' In Target'
   m_TagString: Untagged
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -161,6 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OpenForConnection: 1
+  laneEnd: 0
 --- !u!1001 &772190732935923472
 PrefabInstance:
   m_ObjectHideFlags: 0

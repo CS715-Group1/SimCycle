@@ -8,7 +8,7 @@ public class AIDirector : MonoBehaviour
 {
     public GameObject carPrefab;
     private IntersectionGraph graph;
-    private List<Vector3> path = new();
+    private List<Target> path = new();
 
     private void Start()
     {
@@ -38,7 +38,7 @@ public class AIDirector : MonoBehaviour
         List<Transform> vertexPath = AStar.AStarSearch(graph, start, end, null);
         path = graph.TransformToTargetPath(vertexPath);
 
-        var car = Instantiate(carPrefab, path[0], Quaternion.identity);
+        var car = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
         car.GetComponent<CarAI>().SetPath(path);
     }
 
@@ -49,7 +49,7 @@ public class AIDirector : MonoBehaviour
 
         for (int i = 0; i < path.Count - 1; i++)
         {
-            Gizmos.DrawLine(path[i], path[i + 1]);
+            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
         }
     }
 }

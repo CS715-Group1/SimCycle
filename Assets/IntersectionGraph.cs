@@ -10,11 +10,11 @@ using static UnityEditor.Progress;
 public class Edge
 {
 
-    public List<Vector3> path;
+    public List<Target> path;
     public int weight;
     public Transform neighbour;
 
-    public Edge(List<Vector3> path, int weight, Transform vertex)
+    public Edge(List<Target> path, int weight, Transform vertex)
     {
         this.path = path;
         this.weight = weight;
@@ -28,7 +28,7 @@ public class IntersectionGraph : MonoBehaviour
 
     private Dictionary<Transform, Dictionary<Transform, Edge>> adjacencyList = new();
 
-    private List<Vector3> path = new List<Vector3>();
+    private List<Target> path = new List<Target>();
 
     public static IntersectionGraph _Instance;
 
@@ -111,9 +111,9 @@ public class IntersectionGraph : MonoBehaviour
         return adjacencyList[vertex];
     }
 
-    public List<Vector3> TransformToTargetPath(List<Transform> vertexPath)
+    public List<Target> TransformToTargetPath(List<Transform> vertexPath)
     {
-        List<Vector3> path = new List<Vector3>();
+        List<Target> path = new List<Target>();
 
         for (int i = 0; i < vertexPath.Count - 1; i++)
         {
@@ -157,7 +157,7 @@ public class IntersectionGraph : MonoBehaviour
         throw new Exception("No such edge");
     }
 
-    private List<Vector3> GetEdgePath(Transform startVertex, Transform endVertext)
+    private List<Target> GetEdgePath(Transform startVertex, Transform endVertext)
     {
         return adjacencyList[startVertex][endVertext].path;
     }

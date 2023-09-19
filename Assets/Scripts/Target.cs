@@ -5,4 +5,5 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     public bool OpenForConnection;
+    public bool laneEnd = false;
 }

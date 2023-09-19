@@ -7,20 +7,23 @@ using UnityEngine.Events;
 
 public class CarAI : MonoBehaviour
 {
-    [SerializeField] List<Vector3> path = null;
+    [SerializeField] List<Target> path = null;
 
     [SerializeField] private float arriveDistance = 2f, lastPointArriveDistance = .1f;
     [SerializeField] private float turningAngleOffest = 5;
-    [SerializeField] private Vector3 currentTargetPosition;
+    [SerializeField] private Target currentTarget;
+    [SerializeField] private Transform raycastStart;
+    private float maxDistance = 2f;
 
 
     private int index = 0;
 
     private bool stop;
+    private bool collisionStop;
 
     public bool Stop
     {
-        get { return stop; }
+        get { return stop || collisionStop; }
         set { stop = value; }
     }
 
@@ -35,11 +38,11 @@ public class CarAI : MonoBehaviour
         }
         else
         {
-            currentTargetPosition = path[index];
+            currentTarget = path[index];
         }
     }
 
-    public void SetPath(List<Vector3> path)
+    public void SetPath(List<Target> path)
     {
         if(path.Count == 0)
         {
@@ -50,9 +53,9 @@ public class CarAI : MonoBehaviour
 
         this.path = path;
         index = 0;
-        currentTargetPosition = this.path[index];   
+        currentTarget = this.path[index];   
 
-        Vector3 relativePoint = transform.InverseTransformPoint(this.path[index + 1]);
+        Vector3 relativePoint = transform.InverseTransformPoint(this.path[index + 1].transform.position);
 
         float angle = Mathf.Atan2(relativePoint.x, relativePoint.z) * Mathf.Rad2Deg;
 
@@ -64,21 +67,28 @@ public class CarAI : MonoBehaviour
     {
         CheckIfArrived();
         Drive();
+        CheckForCollisions();
+    }
+
+    private void CheckForCollisions()
+    {
+        if(Physics.Raycast(raycastStart.position, transform.forward, maxDistance, 1 << gameObject.layer))
+        {
+            collisionStop = true;
+        } else
+        {
+            collisionStop = false;
+        }
     }
 
     private void CheckIfArrived()
     {
-        
-
-
         if (Stop == false)
         {
             var distanceToCheck = arriveDistance;
-            Debug.Log(Vector3.Distance(currentTargetPosition, transform.position));
+            Vector3 currentTargetPosition = currentTarget.transform.position;
             if (index == path.Count - 1)
             {
-
-                Debug.Log("Why would it");
                 distanceToCheck = lastPointArriveDistance;
             } 
             if(Vector3.Distance(currentTargetPosition, transform.position) < distanceToCheck)
@@ -100,8 +110,7 @@ public class CarAI : MonoBehaviour
         }
         else
         {
-            currentTargetPosition = path[index];
-            Debug.Log(currentTargetPosition.ToString());
+            currentTarget = path[index];
         }
     }
 
@@ -113,9 +122,17 @@ public class CarAI : MonoBehaviour
         }
         else
         {
-            Vector3 relativePoint = transform.InverseTransformPoint(currentTargetPosition);
+            Vector3 relativePoint = transform.InverseTransformPoint(currentTarget.transform.position);
             float angle = Mathf.Atan2(relativePoint.x, relativePoint.z) * Mathf.Rad2Deg;
             //Debug.Log(angle.ToString());
+
+            float speed = 1;
+
+            if (currentTarget.laneEnd && index != path.Count - 1)
+            {
+                speed = 0.7f;
+            }
+
 
             var rotateCar = 0;
             if (angle > turningAngleOffest)
@@ -126,7 +143,7 @@ public class CarAI : MonoBehaviour
                 rotateCar = -1;
             }
 
-            OnDrive?.Invoke(new Vector2(rotateCar, 1));
+            OnDrive?.Invoke(new Vector2(rotateCar, speed));
         }
     }
 
@@ -134,7 +151,15 @@ public class CarAI : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
 
-        Gizmos.DrawCube(currentTargetPosition, Vector3.one);
+        Gizmos.DrawCube(currentTarget.transform.position, Vector3.one);
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawLine(raycastStart.position, raycastStart.position + transform.forward*maxDistance);
     }
 
+    internal bool IsThisLastPathIndex()
+    {
+        return index >= path.Count-1;
+    }
 }

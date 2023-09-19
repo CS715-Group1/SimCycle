@@ -29,9 +29,6 @@ public class CarControl : MonoBehaviour
         if (rb.velocity.magnitude < maxSpeed){
             rb.AddForce(movementVector.y * power * transform.forward);
         }
-
-        Debug.Log(movementVector.x);
-
         rb.AddTorque(movementVector.x * movementVector.y * torque * Vector3.up);
       
     }
