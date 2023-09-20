@@ -54,9 +54,7 @@ public class AgentVisionController : MonoBehaviour
         IdentifiableObject[] identifiableObjects = Resources.FindObjectsOfTypeAll(
             typeof(IdentifiableObject)) as IdentifiableObject[];
 
-        IdentifiableObject[] visibleObjects = detector.GetVisible(identifiableObjects).ToArray();
-
-        recognisableObjects = detector.GetRecognisable(visibleObjects);
+        recognisableObjects = detector.GetRecognisable(identifiableObjects);
 
         foreach (IdentifiableObject obj in recognisableObjects)
         {

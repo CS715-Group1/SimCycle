@@ -5,9 +5,6 @@ using UnityEditor;
 
 public abstract class IDetector : MonoBehaviour
 {
-    public abstract bool IsObjectVisible(IdentifiableObject obj);
-    public abstract List<IdentifiableObject> GetVisible(IdentifiableObject[] objects);
-
     public abstract bool IsObjectRecognisable(IdentifiableObject obj);
     public abstract List<IdentifiableObject> GetRecognisable(IdentifiableObject[] objects);
 
