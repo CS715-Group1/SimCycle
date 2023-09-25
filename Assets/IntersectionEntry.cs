@@ -1,8 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-public class IntersectionEntry : MonoBehaviour
+[Serializable]
+enum TrafficSign
 {
+    None,
+    GIVE_WAY
+}
+
+
+[Serializable]
+public class IntersectionEntry
+{
+    public ApproachHandler handler;
 
 }

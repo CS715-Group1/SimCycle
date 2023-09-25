@@ -32,8 +32,6 @@ public class IntersectionGraph : MonoBehaviour
 
     public static IntersectionGraph _Instance;
 
-    public Transform start;
-    public Transform end;
 
     void Awake()
     {
@@ -117,7 +115,15 @@ public class IntersectionGraph : MonoBehaviour
 
         for (int i = 0; i < vertexPath.Count - 1; i++)
         {
-            path.AddRange(GetEdgePath(vertexPath[i], vertexPath[i + 1]));
+
+            List<Target> edge = GetEdgePath(vertexPath[i], vertexPath[i + 1]);
+
+            if (path.Count != 0 && path.Last<Target>() == edge[0])
+            {
+                path.RemoveAt(path.Count - 1);
+            }
+
+            path.AddRange(edge);
         }
         return path;
     }

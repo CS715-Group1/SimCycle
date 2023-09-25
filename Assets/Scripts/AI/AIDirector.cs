@@ -10,6 +10,8 @@ public class AIDirector : MonoBehaviour
     private IntersectionGraph graph;
     private List<Target> path = new();
 
+    [SerializeField] private List<Transform> interections = new();
+
     private void Start()
     {
         graph = IntersectionGraph._Instance;
@@ -23,6 +25,24 @@ public class AIDirector : MonoBehaviour
         {
             SpawnCar();
         }
+
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            TrySpawnACarFromIntersections();
+        }
+    }
+
+    private Transform getRandomTransform(Transform exclusion)
+    {
+        Transform vertex = exclusion;
+
+        while (vertex == exclusion)
+        {
+            int randomNumber = UnityEngine.Random.Range(0, interections.Count);
+            vertex = interections[randomNumber];
+        }
+
+        return vertex;
     }
 
     public void SpawnCar()
@@ -42,14 +62,17 @@ public class AIDirector : MonoBehaviour
         car.GetComponent<CarAI>().SetPath(path);
     }
 
-    private void OnDrawGizmos()
+    private void TrySpawnACarFromIntersections()
     {
-        Gizmos.color = Color.green;
 
+        Transform start = getRandomTransform(null);
+        Transform end = getRandomTransform(start);
 
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
-        }
+        List<Transform> vertexPath = AStar.AStarSearch(graph, start, end, null);
+        path = graph.TransformToTargetPath(vertexPath);
+
+        var car = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
+        car.GetComponent<CarAI>().SetPath(path);
     }
+
 }

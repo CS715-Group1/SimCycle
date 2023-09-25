@@ -3,21 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmartRoad : MonoBehaviour
+[Serializable]
+public class ApproachHandler : MonoBehaviour
 {
-    Queue<CarAI> trafficQueue = new();
+    private Queue<CarAI> trafficQueue = new();
     public CarAI currentCar;
-    [SerializeField] private List<ApproachHandler> approachHandlers = new();
+    private List<CarAI> trafficList = new();
+    private IntersectionLogic intersectionLogic;
+    public IntersectionLogic IntersectionLogic { get; set; }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Car"))
         {
-            if (other.TryGetComponent<CarAI>(out CarAI car)){
+            if (other.TryGetComponent<CarAI>(out CarAI car))
+            {
                 if (car != currentCar && !car.IsThisLastPathIndex())
                 {
+                    car.IntersectionLogic = intersectionLogic;
                     trafficQueue.Enqueue(car);
-                    car.Stop = true;
                 }
             }
         }
@@ -25,12 +30,12 @@ public class SmartRoad : MonoBehaviour
 
     private void Update()
     {
-        if(currentCar == null)
+        if (currentCar == null)
         {
-            if(trafficQueue.Count > 0)
+            if (trafficQueue.Count > 0)
             {
                 currentCar = trafficQueue.Dequeue();
-                currentCar.Stop = false;
+                currentCar.MakeIntersectionDecision();           
             }
         }
     }
@@ -48,9 +53,14 @@ public class SmartRoad : MonoBehaviour
 
     private void RemoveCar(CarAI car)
     {
-        if(car == currentCar)
+        if (car == currentCar)
         {
             currentCar = null;
         }
+    }
+
+    internal Turning GetCurrentCarTurn()
+    {
+        return currentCar.Turning;
     }
 }

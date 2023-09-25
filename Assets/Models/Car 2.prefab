@@ -656,7 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   power: 10
   torque: 4
-  maxSpeed: 5
+  maxSpeed: 10
   movementVector: {x: 0, y: 0}
 --- !u!114 &4368056530435990626
 MonoBehaviour:
@@ -670,7 +670,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636f01b11de6b204089978995bc8d652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: []
   arriveDistance: 2.5
   lastPointArriveDistance: 1
   turningAngleOffest: 1

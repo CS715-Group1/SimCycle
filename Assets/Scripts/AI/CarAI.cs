@@ -5,15 +5,29 @@ using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum Turning
+{
+    RIGHT,
+    LEFT,
+    STRAIGHT,
+    BLOCKED
+}
+
 public class CarAI : MonoBehaviour
 {
-    [SerializeField] List<Target> path = null;
+    private List<Target> path = null;
 
-    [SerializeField] private float arriveDistance = 2f, lastPointArriveDistance = .1f;
+    [SerializeField] private float arriveDistance = 1.5f, lastPointArriveDistance = .1f;
     [SerializeField] private float turningAngleOffest = 5;
     [SerializeField] private Target currentTarget;
     [SerializeField] private Transform raycastStart;
     private float maxDistance = 2f;
+
+    private Turning turning;
+    public Turning Turning { get; set; }
+
+    private IntersectionLogic intersectionLogic;
+    public IntersectionLogic IntersectionLogic { get; set; }
 
 
     private int index = 0;
@@ -32,7 +46,9 @@ public class CarAI : MonoBehaviour
 
     private void Start()
     {
-        if(path == null || path.Count == 0)
+        turning = Turning.STRAIGHT;
+
+        if (path == null || path.Count == 0)
         {
             Stop = true;
         }
@@ -130,7 +146,21 @@ public class CarAI : MonoBehaviour
 
             if (currentTarget.laneEnd && index != path.Count - 1)
             {
-                speed = 0.7f;
+                Vector3 nextRelativePoint = transform.InverseTransformPoint(path[index+1].transform.position);
+
+                float nextAngle = Mathf.Atan2(nextRelativePoint.x, nextRelativePoint.z) * Mathf.Rad2Deg;
+
+                if(nextAngle > 20f)
+                {
+                    Debug.Log("Turning right");
+                    turning = Turning.RIGHT;
+                    speed = 0.7f;
+                } else if(nextAngle < -20f)
+                {
+                    Debug.Log("Turning left");
+                    turning = Turning.LEFT;
+                    speed = 0.7f;
+                }
             }
 
 
@@ -147,15 +177,36 @@ public class CarAI : MonoBehaviour
         }
     }
 
+
+
+    public void MakeIntersectionDecision()
+    {
+        if (intersectionLogic.IsAbleToGo(turning))
+        {
+            Stop = false;
+        } else
+        {
+            Stop = true;
+        }
+    }
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
-
-        Gizmos.DrawCube(currentTarget.transform.position, Vector3.one);
 
         Gizmos.color = Color.red;
 
-        Gizmos.DrawLine(raycastStart.position, raycastStart.position + transform.forward*maxDistance);
+        //Gizmos.DrawLine(raycastStart.position, raycastStart.position + transform.forward*maxDistance);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
+        }
+
     }
 
     internal bool IsThisLastPathIndex()

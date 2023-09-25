@@ -14,8 +14,8 @@ public class RoadSection : MonoBehaviour
 {
     [SerializeField] private List<IntersectionConnection> connections;
 
-    private int weight = 0;   
-    private List<Lane> lanes = new();
+    private int weight = 0;
+    [SerializeField] private List<Lane> lanes = new();
     private int sectionNumber = 0;
     private List<Target> targets = new();
     private int opposingConnectionNum = 1;
