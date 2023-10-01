@@ -12,13 +12,15 @@ public class Intersection : MonoBehaviour
     public List<Edge> edges = new();
     public Transform center;
 
+    public List<CarAI> carsInIntersection = new();
+
     private void Start()
     {
         //for each of the IntersectionEntry givng a FourWayLogic that has the approachingLane of the lane opposite and to the right using modulus  
 
         for (int i = 0; i < approachingLanes.Count; i++)
         {
-            IntersectionLogic intersectionLogic = new FourWayLogic(approachingLanes[(i-1)%4].handler, approachingLanes[(i + 1) % 4].handler);
+            IntersectionLogic intersectionLogic = new FourWayLogic(approachingLanes[mod(i - 1, 4)].handler, approachingLanes[mod(i + 2, 4)].handler, approachingLanes[mod(i+1,4)].handler);
             approachingLanes[i].handler.IntersectionLogic = intersectionLogic;
         }
     }
@@ -50,6 +52,78 @@ public class Intersection : MonoBehaviour
         return edges;
     }
 
+    int mod(int x, int m)
+    {
+        return (x % m + m) % m;
+    }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Car"))
+        {
+            if (other.TryGetComponent<CarAI>(out CarAI car))
+            {
+                if (!car.IsThisLastPathIndex() && !carsInIntersection.Contains(car))
+                {
+                    carsInIntersection.Add(car);
+                    RefreshApproachingLanes();
+                }
+            }
+        }
+    }
+
+    private void RefreshApproachingLanes()
+    {
+        foreach (CarAI car in carsInIntersection)
+        {
+            if (!car.IsTakingIntersection())
+            {
+                car.MakeIntersectionDecision();
+            }
+            
+        }
+
+        //foreach (var approach in approachingLanes)
+        //{
+        //    approach.handler.CheckCanGo();
+        //}
+    }
+
+    //private void Update()
+    //{
+    //    if (currentCar == null)
+    //    {
+    //        if (trafficQueue.Count > 0)
+    //        {
+    //            currentCar = trafficQueue.Dequeue();
+    //            currentCar.Stop = false;
+    //        }
+    //    }
+    //}
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Car"))
+        {
+            if (other.TryGetComponent<CarAI>(out CarAI car))
+            {
+                carsInIntersection.Remove(car);
+                car.OutOfIntersection();
+                RemoveApproachingCar(car);
+                RefreshApproachingLanes();
+
+            }
+        }
+    }
+
+    private void RemoveApproachingCar(CarAI car)
+    {
+        foreach (var approach in approachingLanes)
+        {
+
+            approach.handler.RemoveCar(car);
+        }
+    }
 
 }

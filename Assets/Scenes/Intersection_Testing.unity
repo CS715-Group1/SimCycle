@@ -1673,6 +1673,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 181422, guid: 8a6f09027b5c26b4b8d2f6d00dbce6d1, type: 3}
+  requests:
+  - start: {fileID: 1357433106}
+    end: {fileID: 1786225565}
+    delay: 0
+  - start: {fileID: 1258907289}
+    end: {fileID: 2008274401}
+    delay: 200
   interections:
   - {fileID: 1357433106}
   - {fileID: 1258907289}

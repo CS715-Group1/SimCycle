@@ -9,8 +9,14 @@ public class ApproachHandler : MonoBehaviour
     private Queue<CarAI> trafficQueue = new();
     public CarAI currentCar;
     private List<CarAI> trafficList = new();
+    public bool currentCarGoing = false;
+
     private IntersectionLogic intersectionLogic;
-    public IntersectionLogic IntersectionLogic { get; set; }
+    public IntersectionLogic IntersectionLogic
+    {
+        get { return intersectionLogic; }
+        set { intersectionLogic = value; }
+    }
 
 
     private void OnTriggerEnter(Collider other)
@@ -35,23 +41,25 @@ public class ApproachHandler : MonoBehaviour
             if (trafficQueue.Count > 0)
             {
                 currentCar = trafficQueue.Dequeue();
-                currentCar.MakeIntersectionDecision();           
+                //currentCar.MakeIntersectionDecision();           
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Car"))
-        {
-            if (other.TryGetComponent<CarAI>(out CarAI car))
-            {
-                RemoveCar(car);
-            }
-        }
-    }
+    //Potentially might need to add this back in case another car grazes the side of the collider and enters the queue without leaving the expected way
 
-    private void RemoveCar(CarAI car)
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Car"))
+    //    {
+    //        if (other.TryGetComponent<CarAI>(out CarAI car))
+    //        {
+    //            RemoveCar(car);
+    //        }
+    //    }
+    //}
+
+    public void RemoveCar(CarAI car)
     {
         if (car == currentCar)
         {
@@ -60,7 +68,24 @@ public class ApproachHandler : MonoBehaviour
     }
 
     internal Turning GetCurrentCarTurn()
+    {        
+        if(currentCar != null)
+        {
+            return currentCar.GetNextTurn();
+            
+        } else
+        {
+            return Turning.BLOCKED;
+        }
+    }
+
+    internal bool GetCurrentCarGoing()
     {
-        return currentCar.Turning;
+        if(currentCar != null)
+        {
+            return currentCar.IsTakingIntersection();
+        } else { return false; }
+
+        
     }
 }

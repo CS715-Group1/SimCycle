@@ -45,12 +45,6 @@ public class IntersectionGraph : MonoBehaviour
         {
             Generate();
         }
-
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            
-
-        }
     }
 
     private void Generate()
@@ -71,11 +65,6 @@ public class IntersectionGraph : MonoBehaviour
                     
                     AddEdge(child, item.neighbour, item);
                 }
-
-                //for (int i = 0; i < node.ed.Count; i++)
-                //{
-                //    AddEdge(child, node.neighbours[i], node.weights[i]);
-                //}
             }
         }
     }

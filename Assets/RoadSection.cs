@@ -120,7 +120,7 @@ public class RoadSection : MonoBehaviour
         foreach (var item in connections)
         {
             Vector3 intersectionPos = item.intersection.transform.position + new Vector3(3.5f, .5f, 3.5f);
-            Gizmos.DrawSphere( intersectionPos, 0.4f);
+            Gizmos.DrawSphere(intersectionPos, 0.4f);
             foreach (var entry in item.entryPoints)
             {
                 Vector3 entryPos = entry.transform.position + new Vector3(0, .5f, 0);

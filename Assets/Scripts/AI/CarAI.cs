@@ -17,18 +17,24 @@ public class CarAI : MonoBehaviour
 {
     private List<Target> path = null;
 
+    public Queue<Turning> turnQueue = new();
+    public Turning nextTurn;
+
     [SerializeField] private float arriveDistance = 1.5f, lastPointArriveDistance = .1f;
     [SerializeField] private float turningAngleOffest = 5;
     [SerializeField] private Target currentTarget;
     [SerializeField] private Transform raycastStart;
     private float maxDistance = 2f;
 
-    private Turning turning;
-    public Turning Turning { get; set; }
-
     private IntersectionLogic intersectionLogic;
-    public IntersectionLogic IntersectionLogic { get; set; }
+    public IntersectionLogic IntersectionLogic 
+    { 
+        get { return intersectionLogic; }
+        set { intersectionLogic = value; } 
+    }
 
+    public bool takingIntersection = false;
+    public bool blocked = false;
 
     private int index = 0;
 
@@ -46,10 +52,9 @@ public class CarAI : MonoBehaviour
 
     private void Start()
     {
-        turning = Turning.STRAIGHT;
-
         if (path == null || path.Count == 0)
         {
+            Debug.Log("No intial path");
             Stop = true;
         }
         else
@@ -77,6 +82,37 @@ public class CarAI : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0,angle, 0);
         Stop = false;
+        MakeTurnList();
+        nextTurn = turnQueue.Dequeue();
+    }
+
+    private void MakeTurnList()
+    {
+        for (int i = 0; i < path.Count; i++)
+        {
+            Target target = path[i];
+
+            if (target.laneEnd && i != path.Count - 1 && i != 0 && !path[i-1].laneEnd)
+            {
+                Vector3 approachingVector = target.transform.position - path[i - 1].transform.position;
+                Vector3 leavingVector = path[i + 1].transform.position - target.transform.position;
+
+                float nextAngle = Vector3.SignedAngle(approachingVector, leavingVector, Vector3.up);
+
+                if (nextAngle > 20f)
+                {
+                    turnQueue.Enqueue(Turning.RIGHT);
+                }
+                else if (nextAngle < -20f)
+                {
+                    turnQueue.Enqueue(Turning.LEFT);
+                }
+                else
+                {
+                    turnQueue.Enqueue(Turning.STRAIGHT);
+                }
+            }
+        }
     }
 
     private void Update()
@@ -88,7 +124,7 @@ public class CarAI : MonoBehaviour
 
     private void CheckForCollisions()
     {
-        if(Physics.Raycast(raycastStart.position, transform.forward, maxDistance, 1 << gameObject.layer))
+        if(!takingIntersection && Physics.Raycast(raycastStart.position, transform.forward, maxDistance, 1 << gameObject.layer))
         {
             collisionStop = true;
         } else
@@ -140,27 +176,29 @@ public class CarAI : MonoBehaviour
         {
             Vector3 relativePoint = transform.InverseTransformPoint(currentTarget.transform.position);
             float angle = Mathf.Atan2(relativePoint.x, relativePoint.z) * Mathf.Rad2Deg;
-            //Debug.Log(angle.ToString());
 
             float speed = 1;
 
             if (currentTarget.laneEnd && index != path.Count - 1)
             {
-                Vector3 nextRelativePoint = transform.InverseTransformPoint(path[index+1].transform.position);
+                //Vector3 nextRelativePoint = transform.InverseTransformPoint(path[index+1].transform.position);
 
-                float nextAngle = Mathf.Atan2(nextRelativePoint.x, nextRelativePoint.z) * Mathf.Rad2Deg;
+                //float nextAngle = Mathf.Atan2(nextRelativePoint.x, nextRelativePoint.z) * Mathf.Rad2Deg;
 
-                if(nextAngle > 20f)
+                if(nextTurn == Turning.LEFT)
                 {
-                    Debug.Log("Turning right");
-                    turning = Turning.RIGHT;
                     speed = 0.7f;
-                } else if(nextAngle < -20f)
+                }  
+                else if(nextTurn == Turning.RIGHT)
                 {
-                    Debug.Log("Turning left");
-                    turning = Turning.LEFT;
-                    speed = 0.7f;
+                    speed = 0.8f;
                 }
+                
+                if(turnQueue.Count > 0)
+                {
+                    nextTurn = turnQueue.Dequeue();
+                }
+
             }
 
 
@@ -171,23 +209,38 @@ public class CarAI : MonoBehaviour
             } else if (angle < -turningAngleOffest)
             {
                 rotateCar = -1;
-            }
+            }            
 
             OnDrive?.Invoke(new Vector2(rotateCar, speed));
         }
     }
 
-
-
-    public void MakeIntersectionDecision()
+    public bool MakeIntersectionDecision()
     {
-        if (intersectionLogic.IsAbleToGo(turning))
+        Debug.Log(nextTurn);
+        if (intersectionLogic.IsAbleToGo(nextTurn))
         {
             Stop = false;
+            blocked = false;
+            takingIntersection = true;
+            return true;
         } else
         {
+            blocked = true;
             Stop = true;
+            return false;
         }
+    }
+
+    public bool IsTakingIntersection()
+    {
+        return takingIntersection;
+    }
+
+    public void OutOfIntersection()
+    {
+        blocked = false;
+        takingIntersection = false;
     }
 
     private void OnDrawGizmos()
@@ -206,11 +259,23 @@ public class CarAI : MonoBehaviour
         {
             Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
         }
-
     }
 
     internal bool IsThisLastPathIndex()
     {
         return index >= path.Count-1;
+    }
+
+    internal Turning GetNextTurn()
+    {
+        if(blocked)
+        {
+            return Turning.BLOCKED;
+        }
+        else
+        {
+            return nextTurn;
+        }
+        
     }
 }
