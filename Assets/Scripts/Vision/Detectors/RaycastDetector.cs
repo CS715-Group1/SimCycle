@@ -19,9 +19,13 @@ public class RaycastDetector : IDetector
 
     public new Camera camera { get; private set; }
 
+    // Calculate from maxDimension and view cone angle instead
+    Vector2 cameraSize = new(50, 25);
+
     private void Start()
     {
         camera = GetComponent<Camera>();
+        camera.pixelRect = new Rect(0, 0, cameraSize.x, cameraSize.y);
     }
 
     public override List<IdentifiableObject> GetRecognisable(IdentifiableObject[] objects)
