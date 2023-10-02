@@ -164,15 +164,15 @@ public class DepthBufferDetector : IDetector
 
     private float GetDepthFromDepthTexture(int x, int y)
     {
-        // Read the depth value from the depth texture
-        float depth = Camera.main.depthTextureMode == DepthTextureMode.DepthNormals
-            ? Camera.main.depthTexture.GetPixel(x, y).r
-            : Camera.main.depthTexture.GetPixel(x, y).a;
+        //// Read the depth value from the depth texture
+        //float depth = Camera.main.depthTextureMode == DepthTextureMode.DepthNormals
+        //    ? Camera.main.depthTexture.GetPixel(x, y).r
+        //    : Camera.main.depthTexture.GetPixel(x, y).a;
 
-        // Convert the depth value to the range [0, 1]
-        depth = Mathf.Clamp01(depth);
+        //// Convert the depth value to the range [0, 1]
+        //depth = Mathf.Clamp01(depth);
 
-        return depth;
+        return 1;
     }
 
     private float GetObjectDepth(IdentifiableObject obj)

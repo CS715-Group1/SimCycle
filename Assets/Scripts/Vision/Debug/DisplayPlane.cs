@@ -23,26 +23,7 @@ public class DisplayPlane : MonoBehaviour
         // Define the file path where you want to save the image
         string filePath = Application.dataPath + "/Images/" + name + ".png";
 
-        //SaveImage(texture, filePath);
-    }
-
-    public void ApplyRenderTexture(RenderTexture texture)
-    {
-        // Set the material's main texture
-        Material planeMaterial = GetComponent<Renderer>().material;
-        planeMaterial.mainTexture = texture;
-
-        // Calculate the aspect ratio and adjust the plane's scale
-        float aspectRatio = (float)texture.width / texture.height;
-        transform.localScale = new Vector3(scaleFactor * aspectRatio, 1, scaleFactor);
-
-
-
-
-        // Define the file path where you want to save the image
-        string filePath = Application.dataPath + "/Images/" + name + ".png";
-
-        //SaveImage(texture, filePath);
+        SaveImage(texture, filePath);
     }
 
     private void SaveImage(Texture2D texture, string filePath)

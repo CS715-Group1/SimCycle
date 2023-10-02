@@ -7,12 +7,13 @@ using System.Collections.Generic;
 /// </summary>
 public class AgentVisionController : MonoBehaviour
 {
-    [SerializeField] RaycastDetector detector;
+    [SerializeField] IDetector detector;
 
     /// <summary>
     /// Reaction time in seconds
     /// </summary>
     [SerializeField] float reactionTime = 5;
+    [SerializeField] IdentifiableObject target;
 
     public List<IdentifiableObject> recognisableObjects { get; private set; }
 
@@ -39,7 +40,7 @@ public class AgentVisionController : MonoBehaviour
     {
         foreach (IdentifiableObject obj in recognisableObjects)
         {
-            Debug.DrawLine(detector.camera.transform.position, obj.transform.position, Color.green);
+            Debug.DrawLine(detector.GetComponent<Camera>().transform.position, obj.transform.position, Color.green);
         }
     }
 
@@ -51,14 +52,26 @@ public class AgentVisionController : MonoBehaviour
 
         if (!detector.isActiveAndEnabled) return;
 
-        IdentifiableObject[] identifiableObjects = Resources.FindObjectsOfTypeAll(
-            typeof(IdentifiableObject)) as IdentifiableObject[];
-
-        recognisableObjects = detector.GetRecognisable(identifiableObjects);
+        CheckObject();
+        //CheckAllObjects();
 
         foreach (IdentifiableObject obj in recognisableObjects)
         {
             Debug.Log($"{name} sees: {obj.name}");
         }
+    }
+
+    private void CheckObject()
+    {
+        recognisableObjects = detector.GetRecognisable(new IdentifiableObject[] { target });
+    }
+        
+
+    private void CheckAllObjects()
+    {
+        IdentifiableObject[] identifiableObjects = Resources.FindObjectsOfTypeAll(
+            typeof(IdentifiableObject)) as IdentifiableObject[];
+
+        recognisableObjects = detector.GetRecognisable(identifiableObjects);
     }
 }
