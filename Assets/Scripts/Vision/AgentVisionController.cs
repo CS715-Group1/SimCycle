@@ -52,8 +52,8 @@ public class AgentVisionController : MonoBehaviour
 
         if (!detector.isActiveAndEnabled) return;
 
-        CheckObject();
-        //CheckAllObjects();
+        //CheckTargetObject();
+        CheckAllObjects();
 
         foreach (IdentifiableObject obj in recognisableObjects)
         {
@@ -61,7 +61,7 @@ public class AgentVisionController : MonoBehaviour
         }
     }
 
-    private void CheckObject()
+    private void CheckTargetObject()
     {
         recognisableObjects = detector.GetRecognisable(new IdentifiableObject[] { target });
     }
