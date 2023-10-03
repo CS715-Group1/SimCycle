@@ -21,6 +21,7 @@ public class CarAI : MonoBehaviour
     public Queue<Turning> turnQueue = new();
     public Turning nextTurn;
 
+    [SerializeField] private LayerMask layerMask;
     [SerializeField] private float arriveDistance = 1.5f, lastPointArriveDistance = .1f;
     [SerializeField] private float turningAngleOffest = 5;
     [SerializeField] private Target currentTarget;
@@ -125,7 +126,7 @@ public class CarAI : MonoBehaviour
 
     private void CheckForCollisions()
     {
-        if(!takingIntersection && Physics.Raycast(raycastStart.position, transform.forward, maxDistance, 1 << gameObject.layer))
+        if(!takingIntersection && Physics.Raycast(raycastStart.position, transform.forward, maxDistance, layerMask))
         {
             collisionStop = true;
         } else

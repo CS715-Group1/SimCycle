@@ -69,9 +69,21 @@ public class AgentVisionController : MonoBehaviour
 
     private void CheckAllObjects()
     {
-        IdentifiableObject[] identifiableObjects = Resources.FindObjectsOfTypeAll(
+        IdentifiableObject[] allIdentifiableObjects = Resources.FindObjectsOfTypeAll(
             typeof(IdentifiableObject)) as IdentifiableObject[];
 
-        recognisableObjects = detector.GetRecognisable(identifiableObjects);
+        // Create a list to store objects excluding the current object.
+        var identifiableObjects = new List<IdentifiableObject>();
+
+        foreach (IdentifiableObject obj in allIdentifiableObjects)
+        {
+            // Check if the object's instance ID is not the same as the current object's instance ID.
+            if (obj.GetInstanceID() != this.GetInstanceID())
+            {
+                identifiableObjects.Add(obj);
+            }
+        }
+
+        recognisableObjects = detector.GetRecognisable(identifiableObjects.ToArray());
     }
 }
