@@ -13,7 +13,6 @@ public class AgentVisionController : MonoBehaviour
     /// Reaction time in seconds
     /// </summary>
     [SerializeField] float reactionTime = 5;
-    [SerializeField] IdentifiableObject target;
 
     public List<IdentifiableObject> recognisableObjects { get; private set; }
 
@@ -52,18 +51,12 @@ public class AgentVisionController : MonoBehaviour
 
         if (!detector.isActiveAndEnabled) return;
 
-        //CheckTargetObject();
         CheckAllObjects();
 
         foreach (IdentifiableObject obj in recognisableObjects)
         {
             Debug.Log($"{name} sees: {obj.name}");
         }
-    }
-
-    private void CheckTargetObject()
-    {
-        recognisableObjects = detector.GetRecognisable(new IdentifiableObject[] { target });
     }
         
 

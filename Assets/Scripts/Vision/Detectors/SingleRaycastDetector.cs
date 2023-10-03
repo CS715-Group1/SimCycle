@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SingleRaycastDetector : IDetector
 {
+    [SerializeField] float maxViewAngle = 90;
     new Camera camera;
 
     private void Start()
@@ -28,6 +29,9 @@ public class SingleRaycastDetector : IDetector
     {
         Vector3 start = camera.transform.position;
         Vector3 dir = obj.transform.position - camera.transform.position;
+
+        // FIXME: replace with angle from camera
+        if (Vector3.Angle(dir, transform.forward) * 2 > maxViewAngle) return false;
 
         Ray ray = new(start, dir);
 
