@@ -10,7 +10,8 @@ public enum Turning
     RIGHT,
     LEFT,
     STRAIGHT,
-    BLOCKED
+    BLOCKED,
+    NONE
 }
 
 public class CarAI : MonoBehaviour
@@ -217,6 +218,12 @@ public class CarAI : MonoBehaviour
 
     public bool MakeIntersectionDecision()
     {
+
+        //What can I see? function 
+        //Returns a list of the cars/bikes that this agent can see
+        //sends this list to the turn logic ( IsAbleToGo() )
+        //Turn logic factors this in to decision making
+
         Debug.Log(nextTurn);
         if (intersectionLogic.IsAbleToGo(nextTurn))
         {

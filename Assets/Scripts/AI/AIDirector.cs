@@ -15,7 +15,8 @@ public class AIRequest
 
 public class AIDirector : MonoBehaviour
 {
-    public GameObject carPrefab;
+    [SerializeField] private GameObject carPrefab;
+    [SerializeField] private GameObject bikePrefab;
     private IntersectionGraph graph;
     private List<Target> path = new();
 
@@ -47,13 +48,25 @@ public class AIDirector : MonoBehaviour
         {
             RunScenario();
         }
+
+        if (Input.GetKeyUp(KeyCode.W))
+        {
+            Transform start = graph.GetRandomVertex(null);
+            Transform end = graph.GetRandomVertex(start);
+
+            List<Transform> vertexPath = AStar.AStarSearch(graph, start, end, null);
+            path = graph.TransformToTargetPath(vertexPath);
+
+            var bike = Instantiate(bikePrefab, path[0].transform.position, Quaternion.identity);
+            bike.GetComponent<CarAI>().SetPath(path);
+        }
     }
 
     private void RunScenario()
     {
         foreach (var request in requests)
         {
-            System.Threading.Thread.Sleep(request.delay);
+            System.Threading.Thread.Sleep(request.delay*1000);
             List<Transform> vertexPath = AStar.AStarSearch(graph, request.start, request.end, null);
             path = graph.TransformToTargetPath(vertexPath);
 

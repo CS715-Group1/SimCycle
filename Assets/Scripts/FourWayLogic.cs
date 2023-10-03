@@ -18,10 +18,8 @@ public class FourWayLogic : IntersectionLogic
     public bool IsAbleToGo(Turning turn)
     {
         Turning rightLaneTurn = rightLane.GetCurrentCarTurn();
-        Debug.Log(rightLaneTurn);
         Turning oppositeLaneTurn = oppositeLane.GetCurrentCarTurn();
         Turning leftLaneTurn = leftLane.GetCurrentCarTurn();
-        bool rightGoing = rightLane.GetCurrentCarGoing();
         bool oppositeGoing = oppositeLane.GetCurrentCarGoing();
         bool leftGoing = leftLane.GetCurrentCarGoing();
 
@@ -29,20 +27,25 @@ public class FourWayLogic : IntersectionLogic
         switch (turn)
         {
             case Turning.LEFT:
-                if (rightLaneTurn == Turning.STRAIGHT ) return false;
+                if (rightLaneTurn == Turning.STRAIGHT || (oppositeLaneTurn == Turning.RIGHT && oppositeGoing))
+                {
+                    return false;
+                }
                 break;
 
             case Turning.STRAIGHT:
-                if (rightLaneTurn == Turning.STRAIGHT || rightLaneTurn == Turning.RIGHT)
+                if (rightLaneTurn == Turning.STRAIGHT || rightLaneTurn == Turning.RIGHT || (oppositeLaneTurn == Turning.RIGHT && oppositeGoing) || ((leftLaneTurn == Turning.LEFT || leftLaneTurn == Turning.RIGHT ) && leftGoing))
                 {
                     return false;
                 }
                 break;
 
             case Turning.RIGHT:
-                if (rightLaneTurn == Turning.STRAIGHT || rightLaneTurn == Turning.RIGHT || oppositeLaneTurn == Turning.STRAIGHT || oppositeLaneTurn == Turning.LEFT || (oppositeLaneTurn == Turning.RIGHT && oppositeGoing)) return false;
+                if (rightLaneTurn == Turning.STRAIGHT || rightLaneTurn == Turning.RIGHT || oppositeLaneTurn == Turning.STRAIGHT || oppositeLaneTurn == Turning.LEFT || (oppositeLaneTurn == Turning.RIGHT && oppositeGoing) || ((leftLaneTurn == Turning.STRAIGHT || leftLaneTurn == Turning.RIGHT)))
+                {
+                    return false;
+                }
                 break;
-
         }
 
         return true;

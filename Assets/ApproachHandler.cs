@@ -75,7 +75,7 @@ public class ApproachHandler : MonoBehaviour
             
         } else
         {
-            return Turning.BLOCKED;
+            return Turning.NONE;
         }
     }
 
@@ -83,7 +83,8 @@ public class ApproachHandler : MonoBehaviour
     {
         if(currentCar != null)
         {
-            return currentCar.IsTakingIntersection();
+            currentCarGoing = currentCar.IsTakingIntersection();
+            return currentCarGoing;
         } else { return false; }
 
         

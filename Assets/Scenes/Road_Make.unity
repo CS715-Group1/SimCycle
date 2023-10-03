@@ -313,6 +313,7 @@ MonoBehaviour:
   - intersection: {fileID: 1378803331}
     entryPoints:
     - {fileID: 465128361}
+  lanes: []
 --- !u!114 &50652800 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5505618927505376051, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
@@ -878,10 +879,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1378803330}
   - {fileID: 1269383572}
   - {fileID: 1357433106}
   - {fileID: 1258907289}
-  - {fileID: 1378803330}
   - {fileID: 2008274401}
   - {fileID: 1323480078}
   - {fileID: 840775677}
@@ -905,8 +906,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026bb78200b0781419e4c91f9988efcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: {fileID: 1357433106}
-  end: {fileID: 1258907289}
 --- !u!1001 &147903617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1710,6 +1709,7 @@ MonoBehaviour:
   - intersection: {fileID: 1786225566}
     entryPoints:
     - {fileID: 2017788959}
+  lanes: []
 --- !u!1001 &376981943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2258,6 +2258,7 @@ MonoBehaviour:
   - intersection: {fileID: 1357433111}
     entryPoints:
     - {fileID: 610765961}
+  lanes: []
 --- !u!1001 &515709145
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2501,6 +2502,7 @@ MonoBehaviour:
   - intersection: {fileID: 2008274402}
     entryPoints:
     - {fileID: 115595950}
+  lanes: []
 --- !u!1 &542017070
 GameObject:
   m_ObjectHideFlags: 0
@@ -2587,6 +2589,7 @@ MonoBehaviour:
   - intersection: {fileID: 1378803331}
     entryPoints:
     - {fileID: 612243955}
+  lanes: []
 --- !u!1 &544150364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2642,6 +2645,7 @@ MonoBehaviour:
   - intersection: {fileID: 1378803331}
     entryPoints:
     - {fileID: 12541267}
+  lanes: []
 --- !u!1001 &569431838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3300,8 +3304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 026bb78200b0781419e4c91f9988efcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: {fileID: 0}
-  end: {fileID: 0}
 --- !u!114 &718911384 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 599822554396076751, guid: 6f283fb8a5525704983324fe67b4bbae, type: 3}
@@ -3368,6 +3370,7 @@ MonoBehaviour:
   - intersection: {fileID: 50652800}
     entryPoints:
     - {fileID: 920380148}
+  lanes: []
 --- !u!4 &736203593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8577447618087456268, guid: 6f283fb8a5525704983324fe67b4bbae, type: 3}
@@ -3915,7 +3918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000047683716
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4723458646853102618, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4961,6 +4964,7 @@ MonoBehaviour:
   - intersection: {fileID: 126138811}
     entryPoints:
     - {fileID: 287936496}
+  lanes: []
 --- !u!1001 &1038155421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5408,6 +5412,7 @@ MonoBehaviour:
   - intersection: {fileID: 1258907288}
     entryPoints:
     - {fileID: 1474312447}
+  lanes: []
 --- !u!4 &1227485190 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8577447618087456268, guid: 6f283fb8a5525704983324fe67b4bbae, type: 3}
@@ -6312,6 +6317,7 @@ MonoBehaviour:
   - intersection: {fileID: 1258907288}
     entryPoints:
     - {fileID: 278340022}
+  lanes: []
 --- !u!1001 &1436065288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6440,6 +6446,7 @@ MonoBehaviour:
   - intersection: {fileID: 1659619625}
     entryPoints:
     - {fileID: 263984132}
+  lanes: []
 --- !u!1001 &1474312445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6641,6 +6648,7 @@ MonoBehaviour:
   - intersection: {fileID: 1786225566}
     entryPoints:
     - {fileID: 1657603448}
+  lanes: []
 --- !u!1001 &1509953323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7008,6 +7016,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 181422, guid: 8a6f09027b5c26b4b8d2f6d00dbce6d1, type: 3}
+  bikePrefab: {fileID: 7440654739473266381, guid: 5c86f4cba2d44674189f34f6b2101ad8, type: 3}
+  requests:
+  - start: {fileID: 1269383572}
+    end: {fileID: 2008274401}
+    delay: 0
+  - start: {fileID: 1378803330}
+    end: {fileID: 1269383572}
+    delay: 1
+  interections: []
 --- !u!4 &1642118832
 Transform:
   m_ObjectHideFlags: 0
@@ -7082,6 +7099,7 @@ MonoBehaviour:
   - intersection: {fileID: 126138811}
     entryPoints:
     - {fileID: 1504975580}
+  lanes: []
 --- !u!1001 &1657603446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7604,6 +7622,7 @@ MonoBehaviour:
   - intersection: {fileID: 1963433983}
     entryPoints:
     - {fileID: 769269764}
+  lanes: []
 --- !u!1001 &1786225564
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8283,6 +8302,7 @@ MonoBehaviour:
   - intersection: {fileID: 50652800}
     entryPoints:
     - {fileID: 749489822}
+  lanes: []
 --- !u!1001 &1936628120
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8468,6 +8488,7 @@ MonoBehaviour:
   - intersection: {fileID: 1378803331}
     entryPoints:
     - {fileID: 204958827}
+  lanes: []
 --- !u!1001 &1976702441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8970,6 +8991,7 @@ MonoBehaviour:
   - intersection: {fileID: 840775678}
     entryPoints:
     - {fileID: 1295386799}
+  lanes: []
 --- !u!1 &2080578302
 GameObject:
   m_ObjectHideFlags: 0
@@ -9025,6 +9047,7 @@ MonoBehaviour:
   - intersection: {fileID: 1357433111}
     entryPoints:
     - {fileID: 1025801901}
+  lanes: []
 --- !u!1001 &2084964983
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -208,8 +208,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 1, z: 2}
-  m_Center: {x: 5.6, y: 0, z: -1.45}
+  m_Size: {x: 5.5, y: 1, z: 2}
+  m_Center: {x: 6.3, y: 0, z: -1.45}
 --- !u!114 &3099132694313215801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCar: {fileID: 0}
+  currentCarGoing: 0
 --- !u!1 &2273382338843626632
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,8 +444,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 1, z: 2}
-  m_Center: {x: 5.6, y: 0, z: -1.45}
+  m_Size: {x: 5.5, y: 1, z: 2}
+  m_Center: {x: 6.3, y: 0, z: -1.45}
 --- !u!114 &4270116942966297989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCar: {fileID: 0}
+  currentCarGoing: 0
 --- !u!1 &6022359091932105698
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,8 +558,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 1, z: 2}
-  m_Center: {x: 5.6, y: 0, z: -1.45}
+  m_Size: {x: 5.5, y: 1, z: 2}
+  m_Center: {x: 6.3, y: 0, z: -1.45}
 --- !u!114 &8610870213561940591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,6 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCar: {fileID: 0}
+  currentCarGoing: 0
 --- !u!1 &6352215939084870772
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,8 +707,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 1, z: 2}
-  m_Center: {x: 5.6, y: 0, z: -1.45}
+  m_Size: {x: 5.5, y: 1, z: 2}
+  m_Center: {x: 6.3, y: 0, z: -1.45}
 --- !u!114 &362622665999640454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -719,3 +722,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCar: {fileID: 0}
+  currentCarGoing: 0

@@ -81,7 +81,6 @@ public class Intersection : MonoBehaviour
             {
                 car.MakeIntersectionDecision();
             }
-            
         }
 
         //foreach (var approach in approachingLanes)
@@ -121,7 +120,6 @@ public class Intersection : MonoBehaviour
     {
         foreach (var approach in approachingLanes)
         {
-
             approach.handler.RemoveCar(car);
         }
     }
