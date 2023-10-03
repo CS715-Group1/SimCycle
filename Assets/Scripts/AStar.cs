@@ -77,8 +77,10 @@ public class AStar : MonoBehaviour
 
     public static List<Transform> ReconstructPath(Dictionary<Transform, Transform> cameFrom, Transform current)
     {
-        var path = new List<Transform>();
-        path.Add(current);
+        var path = new List<Transform>
+        {
+            current
+        };
 
         while (cameFrom.ContainsKey(current))
         {
