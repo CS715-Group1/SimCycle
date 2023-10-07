@@ -1160,7 +1160,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6f954cd130c292a4a9bccbf1022d4a76, type: 2}
+  - {fileID: 2100000, guid: c308d2a6d97c7844f85392b8076ac230, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1673,13 +1673,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 181422, guid: 8a6f09027b5c26b4b8d2f6d00dbce6d1, type: 3}
+  bikePrefab: {fileID: 7440654739473266381, guid: 5c86f4cba2d44674189f34f6b2101ad8, type: 3}
   requests:
   - start: {fileID: 1357433106}
     end: {fileID: 1786225565}
     delay: 0
   - start: {fileID: 1258907289}
     end: {fileID: 2008274401}
-    delay: 200
+    delay: 2
   interections:
   - {fileID: 1357433106}
   - {fileID: 1258907289}

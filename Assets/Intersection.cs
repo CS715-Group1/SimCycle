@@ -67,7 +67,8 @@ public class Intersection : MonoBehaviour
                 if (!car.IsThisLastPathIndex() && !carsInIntersection.Contains(car))
                 {
                     carsInIntersection.Add(car);
-                    RefreshApproachingLanes();
+                    car.EnterIntesction();
+
                 }
             }
         }

@@ -21,6 +21,7 @@ public class CarControl : MonoBehaviour
 
     public void Move(Vector2 movementInput)
     {
+        Debug.Log(movementInput);
         this.movementVector = movementInput;
     }
 
@@ -29,7 +30,6 @@ public class CarControl : MonoBehaviour
         if (rb.velocity.magnitude < maxSpeed){
             rb.AddForce(movementVector.y * power * transform.forward);
         }
-        rb.AddTorque(movementVector.x * movementVector.y * torque * Vector3.up);
-      
+        rb.AddTorque(movementVector.x * movementVector.y * torque * Vector3.up);     
     }
 }

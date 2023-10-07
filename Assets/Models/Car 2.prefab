@@ -543,9 +543,9 @@ GameObject:
   - component: {fileID: 1246095376157148285}
   - component: {fileID: 7332115053511703471}
   - component: {fileID: 4695636838187809310}
-  - component: {fileID: 5227575805526700131}
   - component: {fileID: 4368056530435990626}
   - component: {fileID: 4933867705154371938}
+  - component: {fileID: 8626160125142325005}
   m_Layer: 10
   m_Name: Car 2
   m_TagString: Car
@@ -640,22 +640,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.554311, y: 1.2575103, z: 3.5813794}
   m_Center: {x: 0.020279765, y: 0.36043423, z: 0.24661303}
---- !u!114 &5227575805526700131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 181422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 178c4dbd1a208a44ea7a31f5227a4670, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  power: 10
-  torque: 4
-  maxSpeed: 10
-  movementVector: {x: 0, y: 0}
 --- !u!114 &4368056530435990626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,21 +653,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextTurn: 0
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 1536
   arriveDistance: 2.5
-  lastPointArriveDistance: 1
+  lastPointArriveDistance: 2
   turningAngleOffest: 1
   currentTarget: {fileID: 0}
   raycastStart: {fileID: 2333075637746832808}
+  vertex: {fileID: 0}
   takingIntersection: 0
   blocked: 0
+  carsSeen: []
   <OnDrive>k__BackingField:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5227575805526700131}
-        m_TargetAssemblyTypeName: CarControl, Assembly-CSharp
+      - m_Target: {fileID: 8626160125142325005}
+        m_TargetAssemblyTypeName: IDMController, Assembly-CSharp
         m_MethodName: Move
         m_Mode: 0
         m_Arguments:
@@ -706,6 +689,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ede7b12b584444291cfc510a580a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8626160125142325005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00ce915f83467ab4a9f82dad6c613434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desiredSpeed: 10
+  timeGap: 1.5
+  minDistance: 3
+  acceleration: 2
+  deceleration: 3
+  maxSpeed: 10
+  torque: 3
+  power: 7
+  driveInfo:
+    stoppingPosition: {x: 0, y: 0, z: 0}
+    matchingSpeed: 0
+    turning: {x: 0, y: 0}
+    turnDirection: 0
+    turn: 0
 --- !u!1 &3801213887404720720
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,7 +798,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detector: {fileID: 3796003542291150004}
   reactionTime: 0.5
-  target: {fileID: 0}
+  <PublishSeenCars>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4368056530435990626}
+        m_TargetAssemblyTypeName: CarAI, Assembly-CSharp
+        m_MethodName: UpdateSeenCars
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7455472904154186173
 GameObject:
   m_ObjectHideFlags: 0

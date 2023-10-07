@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,20 +16,40 @@ public enum Turning
     NONE
 }
 
+
+[Serializable]
+public class DriveInfo
+{
+    public Vector3 stoppingPosition;
+    public float matchingSpeed;
+    public Vector2 turning;
+    public float turnDirection;
+    public Turning turn;
+}
+
+[Serializable]
 public class CarAI : MonoBehaviour
 {
     private List<Target> path = null;
+    private int index = 0;
+
+    private List<Transform> vertexPath = null;
+    private int vertexIndex = 0;
+    private Vector3 stoppingPos;
+
 
     public Queue<Turning> turnQueue = new();
     public Turning nextTurn;
 
-    [SerializeField] private LayerMask layerMask;
-    [SerializeField] private float arriveDistance = 1.5f, lastPointArriveDistance = .1f;
+    [SerializeField] private float arriveDistance = 1.5f, lastPointArriveDistance = 2f;
     [SerializeField] private float turningAngleOffest = 5;
     [SerializeField] private Target currentTarget;
     [SerializeField] private Transform raycastStart;
     private float maxDistance = 2f;
-
+    private float maxDetectionDistance = 20.0f;
+    private DriveInfo driveInfo = new();
+    public Transform vertex;
+    private bool approaching;
     private IntersectionLogic intersectionLogic;
     public IntersectionLogic IntersectionLogic 
     { 
@@ -38,7 +60,8 @@ public class CarAI : MonoBehaviour
     public bool takingIntersection = false;
     public bool blocked = false;
 
-    private int index = 0;
+
+    public List<CarAI> carsSeen = new();
 
     private bool stop;
     private bool collisionStop;
@@ -50,7 +73,7 @@ public class CarAI : MonoBehaviour
     }
 
     [field: SerializeField]
-    public UnityEvent<Vector2> OnDrive { get; set; }
+    public UnityEvent<DriveInfo> OnDrive { get; set; }
 
     private void Start()
     {
@@ -65,7 +88,7 @@ public class CarAI : MonoBehaviour
         }
     }
 
-    public void SetPath(List<Target> path)
+    public void SetPath(List<Target> path, List<Transform> vertexPath)
     {
         if(path.Count == 0)
         {
@@ -77,6 +100,11 @@ public class CarAI : MonoBehaviour
         this.path = path;
         index = 0;
         currentTarget = this.path[index];   
+
+        this.vertexPath = vertexPath;
+        vertexIndex = 1;
+        stoppingPos = vertexPath[vertexIndex].position + new Vector3(3.5f, 0, 3.5f);
+        vertex = vertexPath[vertexIndex];
 
         Vector3 relativePoint = transform.InverseTransformPoint(this.path[index + 1].transform.position);
 
@@ -120,19 +148,42 @@ public class CarAI : MonoBehaviour
     private void Update()
     {
         CheckIfArrived();
+        CheckForCollisions(); 
         Drive();
-        CheckForCollisions();
     }
 
     private void CheckForCollisions()
     {
-        if(!takingIntersection && Physics.Raycast(raycastStart.position, transform.forward, maxDistance, layerMask))
+        //get the distance between the vehicle and the next intersection to check for need to slow down
+        float distanceToIntersection = Vector3.Distance(stoppingPos, transform.position);
+        RaycastHit hit;
+        if ( !(approaching || takingIntersection) && Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
         {
-            collisionStop = true;
-        } else
-        {
-            collisionStop = false;
+            if (hit.collider.CompareTag("Car") && hit.distance < distanceToIntersection)
+            {
+                // The hit.collider is the vehicle in front.
+                Debug.Log("Struck car");
+                driveInfo.matchingSpeed = hit.transform.GetComponent<Rigidbody>().velocity.magnitude;   
+                driveInfo.stoppingPosition = hit.transform.position;
+            } else
+            {
+                driveInfo.stoppingPosition = stoppingPos;
+                driveInfo.matchingSpeed = 0;
+            }
         }
+        else
+        {
+            driveInfo.stoppingPosition = stoppingPos;
+            driveInfo.matchingSpeed = 0;
+        }
+
+        //if (!takingIntersection && Physics.Raycast(raycastStart.position, transform.forward, maxDistance, layerMask))
+        //{
+        //    collisionStop = true;
+        //} else
+        //{
+        //    collisionStop = false;
+        //}
     }
 
     private void CheckIfArrived()
@@ -172,35 +223,23 @@ public class CarAI : MonoBehaviour
     {
         if (Stop)
         {
-            OnDrive?.Invoke(Vector2.zero);
+            //Only call when stopping at an intersection
+            driveInfo.stoppingPosition = stoppingPos;
+            driveInfo.matchingSpeed = 0;
+            
+            OnDrive?.Invoke(driveInfo);
         }
         else
         {
             Vector3 relativePoint = transform.InverseTransformPoint(currentTarget.transform.position);
             float angle = Mathf.Atan2(relativePoint.x, relativePoint.z) * Mathf.Rad2Deg;
 
-            float speed = 1;
-
-            if (currentTarget.laneEnd && index != path.Count - 1)
+            if (index != 0 && path[index-1].laneEnd && index != path.Count - 1)
             {
-                //Vector3 nextRelativePoint = transform.InverseTransformPoint(path[index+1].transform.position);
-
-                //float nextAngle = Mathf.Atan2(nextRelativePoint.x, nextRelativePoint.z) * Mathf.Rad2Deg;
-
-                if(nextTurn == Turning.LEFT)
-                {
-                    speed = 0.7f;
-                }  
-                else if(nextTurn == Turning.RIGHT)
-                {
-                    speed = 0.8f;
-                }
-                
                 if(turnQueue.Count > 0)
                 {
                     nextTurn = turnQueue.Dequeue();
                 }
-
             }
 
 
@@ -211,33 +250,49 @@ public class CarAI : MonoBehaviour
             } else if (angle < -turningAngleOffest)
             {
                 rotateCar = -1;
-            }            
+            }
 
-            OnDrive?.Invoke(new Vector2(rotateCar, speed));
+            driveInfo.turnDirection = rotateCar;
+
+            OnDrive?.Invoke(driveInfo);
         }
     }
 
+    public void Approaching()
+    {
+        if(vertexIndex < vertexPath.Count-1)
+        {
+            vertexIndex++;
+            vertex = vertexPath[vertexIndex];
+            approaching = true;
+        }
+
+    }
+
+    //Check if vehicle is able to go when I get to the interection
     public bool MakeIntersectionDecision()
     {
-
-        //What can I see? function 
-        //Returns a list of the cars/bikes that this agent can see
-        //sends this list to the turn logic ( IsAbleToGo() )
-        //Turn logic factors this in to decision making
-
-        Debug.Log(nextTurn);
-        if (intersectionLogic.IsAbleToGo(nextTurn))
+        if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen))
         {
-            Stop = false;
+            Debug.Log(vertexIndex);
+            vertex = vertexPath[vertexIndex];
+            stoppingPos = vertexPath[vertexIndex].position + new Vector3(3.5f, 0, 3.5f);
+            driveInfo.turn = nextTurn;
+            
             blocked = false;
-            takingIntersection = true;
+            //takingIntersection = true;
             return true;
         } else
         {
             blocked = true;
-            Stop = true;
             return false;
         }
+    }
+
+    //This method is run when a vehicle reaches the intersection to decide if it can take the turn
+    public void EnterIntesction()
+    {
+        takingIntersection = true;
     }
 
     public bool IsTakingIntersection()
@@ -249,24 +304,18 @@ public class CarAI : MonoBehaviour
     {
         blocked = false;
         takingIntersection = false;
+        driveInfo.turn = Turning.STRAIGHT;
     }
 
-    private void OnDrawGizmos()
+    public void UpdateSeenCars(List<CarAI> identifiableObjects)
     {
-
-        Gizmos.color = Color.red;
-
-        //Gizmos.DrawLine(raycastStart.position, raycastStart.position + transform.forward*maxDistance);
+        this.carsSeen = identifiableObjects;
+        //Debug.Log(this.carsSeen[0]);
     }
 
-    private void OnDrawGizmosSelected()
+    public void SetStoppingPoint(Vector3 stoppingPoint)
     {
-        Gizmos.color = Color.green;
-
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
-        }
+        stoppingPos = stoppingPoint;
     }
 
     internal bool IsThisLastPathIndex()
@@ -285,5 +334,23 @@ public class CarAI : MonoBehaviour
             return nextTurn;
         }
         
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        Gizmos.color = Color.red;
+
+        //Gizmos.DrawLine(raycastStart.position, raycastStart.position + transform.forward*maxDetectionDistance);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
+        }
     }
 }

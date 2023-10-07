@@ -6,9 +6,10 @@ using UnityEngine;
 [Serializable]
 public class ApproachHandler : MonoBehaviour
 {
+
+    [SerializeField] private Transform stoppingPoint;
     private Queue<CarAI> trafficQueue = new();
     public CarAI currentCar;
-    private List<CarAI> trafficList = new();
     public bool currentCarGoing = false;
 
     private IntersectionLogic intersectionLogic;
@@ -41,8 +42,22 @@ public class ApproachHandler : MonoBehaviour
             if (trafficQueue.Count > 0)
             {
                 currentCar = trafficQueue.Dequeue();
-                //currentCar.MakeIntersectionDecision();           
+                currentCar.Approaching();
+                currentCar.SetStoppingPoint(stoppingPoint.position);
+                checkCanGo();
             }
+        }
+        else
+        {
+            checkCanGo();
+        }
+    }
+
+    private void checkCanGo()
+    {
+        if (!currentCar.IsTakingIntersection() && !currentCar.MakeIntersectionDecision())
+        {
+            currentCar.SetStoppingPoint(stoppingPoint.position);
         }
     }
 

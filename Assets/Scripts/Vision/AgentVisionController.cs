@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
+using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Handles simul
@@ -15,6 +18,10 @@ public class AgentVisionController : MonoBehaviour
     [SerializeField] float reactionTime = 5;
 
     public List<IdentifiableObject> recognisableObjects { get; private set; }
+
+    [field: SerializeField]
+
+    public UnityEvent<List<CarAI>> PublishSeenCars { get; set; }
 
     int step = 0;
 
@@ -37,16 +44,29 @@ public class AgentVisionController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        List<CarAI> carsSeen = new();
+
         foreach (IdentifiableObject obj in recognisableObjects)
         {
             Debug.DrawLine(detector.GetComponent<Camera>().transform.position, obj.transform.position, Color.green);
+
+            if(obj.TryGetComponent<CarAI>(out CarAI car))
+            {
+                carsSeen.Add(car);
+            }
+
+        }
+
+        if(carsSeen.Count > 0)
+        {
+            PublishSeenCars?.Invoke(carsSeen);
         }
     }
 
     // Advance one simulation step
     private void Step()
     {
-        Debug.Log($"Step {step}");
+        //Debug.Log($"Step {step}");
         step++;
 
         if (!detector.isActiveAndEnabled) return;

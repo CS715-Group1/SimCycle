@@ -58,7 +58,7 @@ public class AIDirector : MonoBehaviour
             path = graph.TransformToTargetPath(vertexPath);
 
             var bike = Instantiate(bikePrefab, path[0].transform.position, Quaternion.identity);
-            bike.GetComponent<CarAI>().SetPath(path);
+            bike.GetComponent<CarAI>().SetPath(path, vertexPath);
         }
     }
 
@@ -66,12 +66,12 @@ public class AIDirector : MonoBehaviour
     {
         foreach (var request in requests)
         {
-            System.Threading.Thread.Sleep(request.delay*1000);
+            //TODO: Find way of delaying car spawn
             List<Transform> vertexPath = AStar.AStarSearch(graph, request.start, request.end, null);
             path = graph.TransformToTargetPath(vertexPath);
 
             var car = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
-            car.GetComponent<CarAI>().SetPath(path);
+            car.GetComponent<CarAI>().SetPath(path, vertexPath);
         }
     }
 
@@ -102,7 +102,7 @@ public class AIDirector : MonoBehaviour
         path = graph.TransformToTargetPath(vertexPath);
 
         var car = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
-        car.GetComponent<CarAI>().SetPath(path);
+        car.GetComponent<CarAI>().SetPath(path, vertexPath);
     }
 
     private void TrySpawnACarFromIntersections()
@@ -115,7 +115,7 @@ public class AIDirector : MonoBehaviour
         path = graph.TransformToTargetPath(vertexPath);
 
         var car = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
-        car.GetComponent<CarAI>().SetPath(path);
+        car.GetComponent<CarAI>().SetPath(path, vertexPath);
     }
 
 }

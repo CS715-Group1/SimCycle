@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FourWayLogic : IntersectionLogic
@@ -15,8 +16,13 @@ public class FourWayLogic : IntersectionLogic
         this.leftLane = leftLane;
     }
 
-    public bool IsAbleToGo(Turning turn)
+    public bool IsAbleToGo(Turning turn, List<CarAI> carsSeen)
     {
+        //Check that agent can see car? then that cars turn is properly retrieved : That cars turn is set to NONE and going is NONE
+        //Get current carAI from Approaching regions 
+        //Compare against carsSeen
+        //If can't see car turn = TURNING.NONE and going = false 
+
         Turning rightLaneTurn = rightLane.GetCurrentCarTurn();
         Turning oppositeLaneTurn = oppositeLane.GetCurrentCarTurn();
         Turning leftLaneTurn = leftLane.GetCurrentCarTurn();
