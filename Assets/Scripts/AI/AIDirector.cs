@@ -46,7 +46,7 @@ public class AIDirector : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.A))
         {
-            RunScenario();
+            StartCoroutine(RunScenario());
         }
 
         if (Input.GetKeyUp(KeyCode.W))
@@ -62,11 +62,11 @@ public class AIDirector : MonoBehaviour
         }
     }
 
-    private void RunScenario()
+    private IEnumerator RunScenario()
     {
         foreach (var request in requests)
         {
-            //TODO: Find way of delaying car spawn
+            yield return new WaitForSeconds(request.delay);
             List<Transform> vertexPath = AStar.AStarSearch(graph, request.start, request.end, null);
             path = graph.TransformToTargetPath(vertexPath);
 
