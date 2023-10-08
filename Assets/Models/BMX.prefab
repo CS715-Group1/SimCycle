@@ -486,8 +486,8 @@ GameObject:
   - component: {fileID: 6609641494295306890}
   - component: {fileID: 3098306038924157647}
   - component: {fileID: 4948809494284024469}
-  - component: {fileID: 5792989001473582160}
   - component: {fileID: 6258976188675562119}
+  - component: {fileID: 6402279457126302062}
   m_Layer: 0
   m_Name: BMX
   m_TagString: Car
@@ -582,22 +582,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &5792989001473582160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7440654739473266381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 178c4dbd1a208a44ea7a31f5227a4670, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  power: 10
-  torque: 4
-  maxSpeed: 10
-  movementVector: {x: 1, y: 1}
 --- !u!114 &6258976188675562119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,13 +600,15 @@ MonoBehaviour:
   turningAngleOffest: 2.5
   currentTarget: {fileID: 0}
   raycastStart: {fileID: 4696636224646250611}
+  vertex: {fileID: 0}
   takingIntersection: 0
   blocked: 0
+  carsSeen: []
   <OnDrive>k__BackingField:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5792989001473582160}
-        m_TargetAssemblyTypeName: CarControl, Assembly-CSharp
+      - m_Target: {fileID: 6402279457126302062}
+        m_TargetAssemblyTypeName: IDMController, Assembly-CSharp
         m_MethodName: Move
         m_Mode: 0
         m_Arguments:
@@ -633,6 +619,32 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6402279457126302062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7440654739473266381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00ce915f83467ab4a9f82dad6c613434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desiredSpeed: 5
+  timeGap: 1.5
+  minDistance: 3
+  acceleration: 2
+  deceleration: 3
+  maxSpeed: 5
+  torque: 3
+  power: 7
+  driveInfo:
+    stoppingPosition: {x: 0, y: 0, z: 0}
+    matchingSpeed: 0
+    turning: {x: 0, y: 0}
+    turnDirection: 0
+    turn: 0
 --- !u!1 &8657773909806089008
 GameObject:
   m_ObjectHideFlags: 0

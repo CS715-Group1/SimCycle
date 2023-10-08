@@ -82,6 +82,11 @@ public class ApproachHandler : MonoBehaviour
         }
     }
 
+    internal CarAI GetCar()
+    {
+        return currentCar;
+    }
+
     internal Turning GetCurrentCarTurn()
     {        
         if(currentCar != null)

@@ -658,6 +658,7 @@ MonoBehaviour:
   turningAngleOffest: 1
   currentTarget: {fileID: 0}
   raycastStart: {fileID: 2333075637746832808}
+  useVision: 1
   vertex: {fileID: 0}
   takingIntersection: 0
   blocked: 0

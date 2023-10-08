@@ -16,19 +16,37 @@ public class FourWayLogic : IntersectionLogic
         this.leftLane = leftLane;
     }
 
-    public bool IsAbleToGo(Turning turn, List<CarAI> carsSeen)
+    public bool IsAbleToGo(Turning turn, List<CarAI> carsSeen, bool useVision)
     {
         //Check that agent can see car? then that cars turn is properly retrieved : That cars turn is set to NONE and going is NONE
         //Get current carAI from Approaching regions 
         //Compare against carsSeen
         //If can't see car turn = TURNING.NONE and going = false 
 
-        Turning rightLaneTurn = rightLane.GetCurrentCarTurn();
-        Turning oppositeLaneTurn = oppositeLane.GetCurrentCarTurn();
-        Turning leftLaneTurn = leftLane.GetCurrentCarTurn();
-        bool oppositeGoing = oppositeLane.GetCurrentCarGoing();
-        bool leftGoing = leftLane.GetCurrentCarGoing();
+        CarAI rightCar = rightLane.GetCar();
+        CarAI leftCar = leftLane.GetCar();
+        CarAI oppositeCar = oppositeLane.GetCar();
 
+        Turning rightLaneTurn = Turning.NONE;
+        Turning leftLaneTurn = Turning.NONE;
+        Turning oppositeLaneTurn = Turning.NONE;
+        bool leftGoing = false;
+        bool oppositeGoing = false;
+
+        if (!useVision || carsSeen.Contains(rightCar)){
+            rightLaneTurn = rightLane.GetCurrentCarTurn();
+        } 
+
+        if (!useVision || carsSeen.Contains(leftCar))
+        {
+            leftLaneTurn = leftLane.GetCurrentCarTurn();
+            leftGoing = leftLane.GetCurrentCarGoing();
+        }
+
+        if (!useVision || carsSeen.Contains(oppositeCar)){
+            oppositeLaneTurn = oppositeLane.GetCurrentCarTurn();
+            oppositeGoing = oppositeLane.GetCurrentCarGoing();
+        }
 
         switch (turn)
         {

@@ -45,6 +45,7 @@ public class CarAI : MonoBehaviour
     [SerializeField] private float turningAngleOffest = 5;
     [SerializeField] private Target currentTarget;
     [SerializeField] private Transform raycastStart;
+    [SerializeField] private bool useVision;
     private float maxDistance = 2f;
     private float maxDetectionDistance = 20.0f;
     private DriveInfo driveInfo = new();
@@ -157,7 +158,7 @@ public class CarAI : MonoBehaviour
         //get the distance between the vehicle and the next intersection to check for need to slow down
         float distanceToIntersection = Vector3.Distance(stoppingPos, transform.position);
         RaycastHit hit;
-        if ( !(approaching || takingIntersection) && Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
+        if ( !(approaching) && Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
         {
             if (hit.collider.CompareTag("Car") && hit.distance < distanceToIntersection)
             {
@@ -272,7 +273,7 @@ public class CarAI : MonoBehaviour
     //Check if vehicle is able to go when I get to the interection
     public bool MakeIntersectionDecision()
     {
-        if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen))
+        if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, useVision))
         {
             Debug.Log(vertexIndex);
             vertex = vertexPath[vertexIndex];
@@ -280,7 +281,7 @@ public class CarAI : MonoBehaviour
             driveInfo.turn = nextTurn;
             
             blocked = false;
-            //takingIntersection = true;
+
             return true;
         } else
         {
@@ -293,6 +294,7 @@ public class CarAI : MonoBehaviour
     public void EnterIntesction()
     {
         takingIntersection = true;
+        approaching = false;
     }
 
     public bool IsTakingIntersection()
