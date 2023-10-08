@@ -10,7 +10,7 @@ public class AIRequest
 {
     public Transform start;
     public Transform end;
-    public int delay;
+    public float delay;
 }
 
 public class AIDirector : MonoBehaviour
