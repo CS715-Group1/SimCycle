@@ -46,12 +46,14 @@ public class CarAI : MonoBehaviour
     [SerializeField] private Target currentTarget;
     [SerializeField] private Transform raycastStart;
     [SerializeField] private bool useVision;
+    [SerializeField] private bool reckless;
     private float maxDistance = 2f;
     private float maxDetectionDistance = 20.0f;
     private DriveInfo driveInfo = new();
     public Transform vertex;
     private bool approaching;
     private IntersectionLogic intersectionLogic;
+    private Rigidbody rb;
     public IntersectionLogic IntersectionLogic 
     { 
         get { return intersectionLogic; }
@@ -76,8 +78,14 @@ public class CarAI : MonoBehaviour
     [field: SerializeField]
     public UnityEvent<DriveInfo> OnDrive { get; set; }
 
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     private void Start()
     {
+
         if (path == null || path.Count == 0)
         {
             Debug.Log("No intial path");
@@ -148,8 +156,28 @@ public class CarAI : MonoBehaviour
 
     private void Update()
     {
+        if(GameState.Instance.stopMotion)
+        {
+            rb.velocity = Vector3.zero;
+        }
+        else
+        {
+            TryDriveVehicle();
+        }
+    }
+
+    private void TryDriveVehicle()
+    {
         CheckIfArrived();
-        CheckForCollisions(); 
+        if (reckless && nextTurn == Turning.STRAIGHT)
+        {
+            CheckForCollisionsReckless();
+        }
+        else
+        {
+            CheckForCollisions();
+
+        }
         Drive();
     }
 
@@ -163,7 +191,6 @@ public class CarAI : MonoBehaviour
             if (hit.collider.CompareTag("Car") && hit.distance < distanceToIntersection)
             {
                 // The hit.collider is the vehicle in front.
-                Debug.Log("Struck car");
                 driveInfo.matchingSpeed = hit.transform.GetComponent<Rigidbody>().velocity.magnitude;   
                 driveInfo.stoppingPosition = hit.transform.position;
             } else
@@ -177,14 +204,31 @@ public class CarAI : MonoBehaviour
             driveInfo.stoppingPosition = stoppingPos;
             driveInfo.matchingSpeed = 0;
         }
+    }
 
-        //if (!takingIntersection && Physics.Raycast(raycastStart.position, transform.forward, maxDistance, layerMask))
-        //{
-        //    collisionStop = true;
-        //} else
-        //{
-        //    collisionStop = false;
-        //}
+    private void CheckForCollisionsReckless()
+    {
+        //get the distance between the vehicle and the next intersection to check for need to slow down
+        //float distanceToIntersection = Vector3.Distance(stoppingPos, transform.position);
+        RaycastHit hit;
+        if (!(approaching) && Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
+        {
+            if (hit.collider.CompareTag("Car"))
+            {
+                // The hit.collider is the vehicle in front.
+                driveInfo.matchingSpeed = hit.transform.GetComponent<Rigidbody>().velocity.magnitude;
+                driveInfo.stoppingPosition = hit.transform.position;
+            }
+            else
+            {
+                driveInfo.stoppingPosition = new Vector3(0,1000,0);
+            }
+
+        }
+        else
+        {
+            driveInfo.stoppingPosition = new Vector3(0, 1000, 0);
+        }
     }
 
     private void CheckIfArrived()
@@ -224,7 +268,6 @@ public class CarAI : MonoBehaviour
     {
         if (Stop)
         {
-            //Only call when stopping at an intersection
             driveInfo.stoppingPosition = stoppingPos;
             driveInfo.matchingSpeed = 0;
             
@@ -275,7 +318,6 @@ public class CarAI : MonoBehaviour
     {
         if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, useVision))
         {
-            Debug.Log(vertexIndex);
             vertex = vertexPath[vertexIndex];
             stoppingPos = vertexPath[vertexIndex].position + new Vector3(3.5f, 0, 3.5f);
             driveInfo.turn = nextTurn;
@@ -312,7 +354,6 @@ public class CarAI : MonoBehaviour
     public void UpdateSeenCars(List<CarAI> identifiableObjects)
     {
         this.carsSeen = identifiableObjects;
-        //Debug.Log(this.carsSeen[0]);
     }
 
     public void SetStoppingPoint(Vector3 stoppingPoint)

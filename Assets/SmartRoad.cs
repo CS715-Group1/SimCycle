@@ -17,7 +17,7 @@ public class SmartRoad : MonoBehaviour
                 if (car != currentCar && !car.IsThisLastPathIndex())
                 {
                     trafficQueue.Enqueue(car);
-                    car.Stop = true;
+                    //car.Stop = true;
                 }
             }
         }
@@ -30,7 +30,7 @@ public class SmartRoad : MonoBehaviour
             if(trafficQueue.Count > 0)
             {
                 currentCar = trafficQueue.Dequeue();
-                currentCar.Stop = false;
+                //currentCar.Stop = false;
             }
         }
     }
