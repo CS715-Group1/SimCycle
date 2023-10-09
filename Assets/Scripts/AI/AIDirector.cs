@@ -11,6 +11,12 @@ public class AIRequest
     public Transform start;
     public Transform end;
     public float delay;
+    public AgentType type;
+}
+
+public enum AgentType
+{
+    CAR, CYCLIST, TARGET_CAR
 }
 
 public class AIDirector : MonoBehaviour
@@ -71,8 +77,22 @@ public class AIDirector : MonoBehaviour
             List<Transform> vertexPath = AStar.AStarSearch(graph, request.start, request.end, null);
             path = graph.TransformToTargetPath(vertexPath);
 
-            var car = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
-            car.GetComponent<CarAI>().SetPath(path, vertexPath);
+            GameObject agent;
+
+            switch (request.type)
+            {
+                case AgentType.CYCLIST:
+                    agent = Instantiate(bikePrefab, path[0].transform.position, Quaternion.identity);
+                    break;
+                case AgentType.TARGET_CAR:
+                    agent = Instantiate(greenCarPrefab, path[0].transform.position, Quaternion.identity);
+                    break;
+                default:
+                    agent = Instantiate(carPrefab, path[0].transform.position, Quaternion.identity);
+                    break;
+            }
+
+            agent.GetComponent<CarAI>().SetPath(path, vertexPath);
         }
     }
 
