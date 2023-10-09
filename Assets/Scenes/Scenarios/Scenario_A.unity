@@ -1710,6 +1710,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1642118832}
   - component: {fileID: 1642118831}
+  - component: {fileID: 1642118833}
   m_Layer: 0
   m_Name: AI Director
   m_TagString: Untagged
@@ -1731,6 +1732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 181422, guid: 8a6f09027b5c26b4b8d2f6d00dbce6d1, type: 3}
   bikePrefab: {fileID: 7440654739473266381, guid: 5c86f4cba2d44674189f34f6b2101ad8, type: 3}
+  greenCarPrefab: {fileID: 181422, guid: 16068bf3bc9e85041a3a5dd768c24e73, type: 3}
   requests:
   - start: {fileID: 2008274401}
     end: {fileID: 1258907289}
@@ -1758,6 +1760,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1642118833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642118830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01061e1660991f841a81738913a5fecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stopMotion: 0
 --- !u!1001 &1786225564
 PrefabInstance:
   m_ObjectHideFlags: 0

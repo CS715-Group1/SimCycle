@@ -17,6 +17,7 @@ public class AIDirector : MonoBehaviour
 {
     [SerializeField] private GameObject carPrefab;
     [SerializeField] private GameObject bikePrefab;
+    [SerializeField] private GameObject greenCarPrefab;
     private IntersectionGraph graph;
     private List<Target> path = new();
 
