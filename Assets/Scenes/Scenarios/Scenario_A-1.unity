@@ -1734,15 +1734,15 @@ MonoBehaviour:
   bikePrefab: {fileID: 7440654739473266381, guid: 5c86f4cba2d44674189f34f6b2101ad8, type: 3}
   greenCarPrefab: {fileID: 181422, guid: 16068bf3bc9e85041a3a5dd768c24e73, type: 3}
   requests:
-  - start: {fileID: 1786225565}
-    end: {fileID: 1258907289}
-    delay: 0.5
-    type: 0
-    isReckless: 1
   - start: {fileID: 2008274401}
-    end: {fileID: 1258907289}
+    end: {fileID: 1786225565}
     delay: 0
     type: 1
+    isReckless: 0
+  - start: {fileID: 1786225565}
+    end: {fileID: 1357433106}
+    delay: 2
+    type: 2
     isReckless: 0
   interections:
   - {fileID: 1357433106}
