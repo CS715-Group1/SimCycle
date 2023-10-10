@@ -86,8 +86,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.76744425
-  m_Center: {x: 0, y: 0.19404364, z: 0.16669005}
+  m_Radius: 1.014338
+  m_Center: {x: 0, y: -0.052850038, z: 0.1666894}
 --- !u!65 &4695636838187809310
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detector: {fileID: 3796003542291150004}
-  reactionTime: 0.5
+  reactionTime: 0.25
   <PublishSeenCars>k__BackingField:
     m_PersistentCalls:
       m_Calls:

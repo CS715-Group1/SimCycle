@@ -799,7 +799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detector: {fileID: 3796003542291150004}
-  reactionTime: 0.5
+  reactionTime: 0.25
   <PublishSeenCars>k__BackingField:
     m_PersistentCalls:
       m_Calls:
