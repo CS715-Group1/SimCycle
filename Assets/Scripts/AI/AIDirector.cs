@@ -21,6 +21,7 @@ public enum AgentType
 
 public class AIDirector : MonoBehaviour
 {
+    [SerializeField] private bool useVision;
     [SerializeField] private GameObject carPrefab;
     [SerializeField] private GameObject bikePrefab;
     [SerializeField] private GameObject greenCarPrefab;
