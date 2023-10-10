@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1038,7 +1038,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
-      value: Road Cross Road (6)
+      value: Road Cross Road (Middle)
       objectReference: {fileID: 0}
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_IsActive
@@ -1555,7 +1555,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
-      value: Road Cross Road (3)
+      value: Road Cross Road (North)
       objectReference: {fileID: 0}
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_IsActive
@@ -1734,12 +1734,14 @@ MonoBehaviour:
   bikePrefab: {fileID: 7440654739473266381, guid: 5c86f4cba2d44674189f34f6b2101ad8, type: 3}
   greenCarPrefab: {fileID: 181422, guid: 16068bf3bc9e85041a3a5dd768c24e73, type: 3}
   requests:
-  - start: {fileID: 2008274401}
-    end: {fileID: 1258907289}
-    delay: 0
   - start: {fileID: 1786225565}
     end: {fileID: 1357433106}
     delay: 0
+    type: 1
+  - start: {fileID: 2008274401}
+    end: {fileID: 1258907289}
+    delay: 6
+    type: 0
   interections:
   - {fileID: 1357433106}
   - {fileID: 1258907289}
@@ -1783,7 +1785,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
-      value: Road Cross Road (11)
+      value: Road Cross Road (South)
       objectReference: {fileID: 0}
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_IsActive
@@ -2267,7 +2269,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
-      value: Road Cross Road (7)
+      value: Road Cross Road (West)
       objectReference: {fileID: 0}
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_IsActive
@@ -2377,7 +2379,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_Name
-      value: Road Cross Road (4)
+      value: Road Cross Road (East)
       objectReference: {fileID: 0}
     - target: {fileID: 1607924482645503249, guid: 827f4c7983e51bd4b9a7bfa69f919124, type: 3}
       propertyPath: m_IsActive
