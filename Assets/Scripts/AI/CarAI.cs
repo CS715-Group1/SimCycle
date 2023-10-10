@@ -316,6 +316,8 @@ public class CarAI : MonoBehaviour
     //Check if vehicle is able to go when I get to the interection
     public bool MakeIntersectionDecision()
     {
+        Debug.Log(carsSeen);
+
         if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, GameState.Instance.useVision))
         {
             vertex = vertexPath[vertexIndex];

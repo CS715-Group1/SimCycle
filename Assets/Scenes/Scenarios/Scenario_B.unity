@@ -1782,7 +1782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stopMotion: 0
-  useVision: 0
+  useVision: 1
 --- !u!1001 &1786225564
 PrefabInstance:
   m_ObjectHideFlags: 0
