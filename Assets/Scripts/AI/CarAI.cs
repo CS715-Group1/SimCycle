@@ -186,7 +186,7 @@ public class CarAI : MonoBehaviour
         //get the distance between the vehicle and the next intersection to check for need to slow down
         float distanceToIntersection = Vector3.Distance(stoppingPos, transform.position);
         RaycastHit hit;
-        if ( !(approaching) && Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
+        if ( Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
         {
             if (hit.collider.CompareTag("Car") && hit.distance < distanceToIntersection)
             {
@@ -211,7 +211,7 @@ public class CarAI : MonoBehaviour
         //get the distance between the vehicle and the next intersection to check for need to slow down
         //float distanceToIntersection = Vector3.Distance(stoppingPos, transform.position);
         RaycastHit hit;
-        if (!(approaching) && Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
+        if (Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
         {
             if (hit.collider.CompareTag("Car"))
             {
@@ -316,8 +316,6 @@ public class CarAI : MonoBehaviour
     //Check if vehicle is able to go when I get to the interection
     public bool MakeIntersectionDecision()
     {
-        Debug.Log(carsSeen);
-
         if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, GameState.Instance.useVision))
         {
             vertex = vertexPath[vertexIndex];
