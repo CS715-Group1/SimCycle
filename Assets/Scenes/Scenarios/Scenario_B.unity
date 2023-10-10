@@ -1742,7 +1742,7 @@ MonoBehaviour:
   - start: {fileID: 1258907289}
     end: {fileID: 2008274401}
     delay: 3
-    type: 0
+    type: 1
   - start: {fileID: 1357433106}
     end: {fileID: 1786225565}
     delay: 4
