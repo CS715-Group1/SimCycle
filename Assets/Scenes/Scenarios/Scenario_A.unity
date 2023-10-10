@@ -1738,10 +1738,12 @@ MonoBehaviour:
     end: {fileID: 1357433106}
     delay: 0
     type: 1
+    isReckless: 0
   - start: {fileID: 2008274401}
     end: {fileID: 1258907289}
     delay: 6
-    type: 0
+    type: 2
+    isReckless: 1
   interections:
   - {fileID: 1357433106}
   - {fileID: 1258907289}
@@ -1775,6 +1777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stopMotion: 0
+  useVision: 1
 --- !u!1001 &1786225564
 PrefabInstance:
   m_ObjectHideFlags: 0
