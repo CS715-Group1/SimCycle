@@ -46,7 +46,7 @@ public class CarAI : MonoBehaviour
     [SerializeField] private Target currentTarget;
     [SerializeField] private Transform raycastStart;
     [SerializeField] private bool useVision;
-    [SerializeField] private bool reckless;
+    [SerializeField] public bool reckless;
     private float maxDistance = 2f;
     private float maxDetectionDistance = 20.0f;
     private DriveInfo driveInfo = new();
@@ -316,7 +316,7 @@ public class CarAI : MonoBehaviour
     //Check if vehicle is able to go when I get to the interection
     public bool MakeIntersectionDecision()
     {
-        if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, useVision))
+        if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, GameState.Instance.useVision))
         {
             vertex = vertexPath[vertexIndex];
             stoppingPos = vertexPath[vertexIndex].position + new Vector3(3.5f, 0, 3.5f);

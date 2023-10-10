@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
 {
     public static GameState Instance { get; private set; }
     public bool stopMotion = false;
+    public bool useVision = true;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.

@@ -12,6 +12,7 @@ public class AIRequest
     public Transform end;
     public float delay;
     public AgentType type;
+    public bool isReckless;
 }
 
 public enum AgentType
@@ -21,7 +22,6 @@ public enum AgentType
 
 public class AIDirector : MonoBehaviour
 {
-    [SerializeField] private bool useVision;
     [SerializeField] private GameObject carPrefab;
     [SerializeField] private GameObject bikePrefab;
     [SerializeField] private GameObject greenCarPrefab;
@@ -93,7 +93,9 @@ public class AIDirector : MonoBehaviour
                     break;
             }
 
-            agent.GetComponent<CarAI>().SetPath(path, vertexPath);
+            CarAI ai = agent.GetComponent<CarAI>();
+            ai.SetPath(path, vertexPath);
+            ai.reckless = request.isReckless;
         }
     }
 
