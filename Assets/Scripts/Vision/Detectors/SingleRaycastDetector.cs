@@ -31,11 +31,7 @@ public class SingleRaycastDetector : IDetector
         Vector3 dir = obj.transform.position - camera.transform.position;
 
         // FIXME: replace with angle from camera
-        Debug.Log($"{this.transform.parent.name} Angle: {Vector3.Angle(dir, transform.forward)}");
-        Debug.Log(Vector3.Angle(dir, transform.forward) * 2 > maxViewAngle);
         if (Vector3.Angle(dir, transform.forward) * 2 > maxViewAngle) return false;
-
-        Debug.Log(this.transform.parent.name + " detecting");
 
         Ray ray = new(start, dir);
 
