@@ -1,12 +1,7 @@
 using System;
-
-[Serializable]
-enum TrafficSign
-{
-    None,
-    GIVE_WAY
-}
-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class IntersectionEntry

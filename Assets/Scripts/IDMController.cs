@@ -30,7 +30,7 @@ public class IDMController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
+        //switch case to get speed needed to successfully make a turn at an intersection
         switch (driveInfo.turn)
         {
             case Turning.LEFT:
@@ -62,9 +62,9 @@ public class IDMController : MonoBehaviour
 
     private float CalculateAcceleration()
     {
-        float deltaSpeed = rb.velocity.magnitude - driveInfo.matchingSpeed;//targetVehicle.GetComponent<Rigidbody>().velocity.magnitude;
+        float deltaSpeed = rb.velocity.magnitude - driveInfo.matchingSpeed;
         float desiredDistance = minDistance + Mathf.Max(0, rb.velocity.magnitude * timeGap + (rb.velocity.magnitude * deltaSpeed) / (2 * Mathf.Sqrt(acceleration * deceleration)));
-        float distance = Vector3.Distance(transform.position, driveInfo.stoppingPosition); //targetVehicle.position);
+        float distance = Vector3.Distance(transform.position, driveInfo.stoppingPosition); 
 
         float desiredAcceleration = acceleration * (1 - Mathf.Pow(rb.velocity.magnitude / desiredSpeed, 4) - Mathf.Pow(desiredDistance / distance, 2));
         desiredAcceleration = Mathf.Clamp(desiredAcceleration, -deceleration, acceleration);

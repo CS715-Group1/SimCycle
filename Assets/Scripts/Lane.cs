@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This class represents a single lane of a road section
 [Serializable]
 public class Lane
 {
