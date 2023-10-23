@@ -83,24 +83,7 @@ public class Intersection : MonoBehaviour
                 car.MakeIntersectionDecision();
             }
         }
-
-        //foreach (var approach in approachingLanes)
-        //{
-        //    approach.handler.CheckCanGo();
-        //}
     }
-
-    //private void Update()
-    //{
-    //    if (currentCar == null)
-    //    {
-    //        if (trafficQueue.Count > 0)
-    //        {
-    //            currentCar = trafficQueue.Dequeue();
-    //            currentCar.Stop = false;
-    //        }
-    //    }
-    //}
 
     private void OnTriggerExit(Collider other)
     {

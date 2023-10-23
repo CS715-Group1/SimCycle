@@ -47,11 +47,9 @@ public class CarAI : MonoBehaviour
     [SerializeField] private Transform raycastStart;
     [SerializeField] private bool useVision;
     [SerializeField] public bool reckless;
-    private float maxDistance = 2f;
     private float maxDetectionDistance = 20.0f;
     private DriveInfo driveInfo = new();
     public Transform vertex;
-    private bool approaching;
     private IntersectionLogic intersectionLogic;
     private Rigidbody rb;
     public IntersectionLogic IntersectionLogic 
@@ -125,6 +123,8 @@ public class CarAI : MonoBehaviour
         nextTurn = turnQueue.Dequeue();
     }
 
+    //Method to generate a list of turns that the car can iterate through.
+    //This turn list will be used to determine what direction the car is going in next so it can inform other agents
     private void MakeTurnList()
     {
         for (int i = 0; i < path.Count; i++)
@@ -169,6 +169,7 @@ public class CarAI : MonoBehaviour
     private void TryDriveVehicle()
     {
         CheckIfArrived();
+        //reckless causes drivers going straight through an intersection to maintain their speed
         if (reckless && nextTurn == Turning.STRAIGHT)
         {
             CheckForCollisionsReckless();
@@ -208,8 +209,6 @@ public class CarAI : MonoBehaviour
 
     private void CheckForCollisionsReckless()
     {
-        //get the distance between the vehicle and the next intersection to check for need to slow down
-        //float distanceToIntersection = Vector3.Distance(stoppingPos, transform.position);
         RaycastHit hit;
         if (Physics.Raycast(raycastStart.position, transform.forward, out hit, maxDetectionDistance))
         {
@@ -275,6 +274,7 @@ public class CarAI : MonoBehaviour
         }
         else
         {
+            //get the angle from the direction the agent is pointing to the next target
             Vector3 relativePoint = transform.InverseTransformPoint(currentTarget.transform.position);
             float angle = Mathf.Atan2(relativePoint.x, relativePoint.z) * Mathf.Rad2Deg;
 
@@ -296,29 +296,19 @@ public class CarAI : MonoBehaviour
                 rotateCar = -1;
             }
 
+            //package infomation about the current state of the car and send it to the IDM controller
             driveInfo.turnDirection = rotateCar;
-
             OnDrive?.Invoke(driveInfo);
         }
     }
 
-    public void Approaching()
-    {
-        if(vertexIndex < vertexPath.Count-1)
-        {
-            vertexIndex++;
-            vertex = vertexPath[vertexIndex];
-            approaching = true;
-        }
-
-    }
-
-    //Check if vehicle is able to go when I get to the interection
+    //Check if vehicle is able to go when it gets to the interection
     public bool MakeIntersectionDecision()
     {
         if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, GameState.Instance.useVision))
         {
             vertex = vertexPath[vertexIndex];
+            //stopping position is offset to make it in the center of the intersection
             stoppingPos = vertexPath[vertexIndex].position + new Vector3(3.5f, 0, 3.5f);
             driveInfo.turn = nextTurn;
             
@@ -336,7 +326,6 @@ public class CarAI : MonoBehaviour
     public void EnterIntesction()
     {
         takingIntersection = true;
-        approaching = false;
     }
 
     public bool IsTakingIntersection()

@@ -27,9 +27,6 @@ public class IntersectionGraph : MonoBehaviour
 {
 
     private Dictionary<Transform, Dictionary<Transform, Edge>> adjacencyList = new();
-
-    private List<Target> path = new List<Target>();
-
     public static IntersectionGraph _Instance;
 
 
@@ -41,6 +38,7 @@ public class IntersectionGraph : MonoBehaviour
 
     private void Update()
     {
+        
         if(Input.GetKeyDown(KeyCode.Space)) 
         {
             Generate();
@@ -49,8 +47,6 @@ public class IntersectionGraph : MonoBehaviour
 
     private void Generate()
     {
-        //adjacencyList = new Dictionary<Transform, Dictionary<Transform, Edge>>();
-
         foreach (Transform child in transform)
         {
             AddVertex(child);
@@ -85,7 +81,6 @@ public class IntersectionGraph : MonoBehaviour
         }
 
         adjacencyList[vertex1][vertex2] = edge;
-        //adjacencyList[vertex2][vertex1] = edge;
     }
 
     public Dictionary<Transform, Edge> GetNeighbors(Transform vertex)
@@ -115,24 +110,6 @@ public class IntersectionGraph : MonoBehaviour
             path.AddRange(edge);
         }
         return path;
-    }
-
-
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-            
-        foreach (var vertex in adjacencyList.Keys)
-        {
-            Vector3 vertexPos = vertex.position + new Vector3(3.5f, .5f, 3.5f);
-            Gizmos.DrawSphere(vertexPos, 1);
-            foreach (var neighbor in adjacencyList[vertex])
-            {
-                Vector3 neighbourPos = neighbor.Key.position + new Vector3(3.5f, .5f, 3.5f);
-                Gizmos.DrawLine(vertexPos, neighbourPos);
-            }
-        }
     }
 
     public List<Transform> GetVertices()
@@ -169,5 +146,21 @@ public class IntersectionGraph : MonoBehaviour
         }
 
         return vertex;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        foreach (var vertex in adjacencyList.Keys)
+        {
+            Vector3 vertexPos = vertex.position + new Vector3(3.5f, .5f, 3.5f);
+            Gizmos.DrawSphere(vertexPos, 1);
+            foreach (var neighbor in adjacencyList[vertex])
+            {
+                Vector3 neighbourPos = neighbor.Key.position + new Vector3(3.5f, .5f, 3.5f);
+                Gizmos.DrawLine(vertexPos, neighbourPos);
+            }
+        }
     }
 }

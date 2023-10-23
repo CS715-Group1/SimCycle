@@ -7,7 +7,7 @@ using UnityEngine;
 public class ApproachHandler : MonoBehaviour
 {
 
-    [SerializeField] private Transform stoppingPoint;
+    [SerializeField] private Transform stoppingPoint;//This is the point the agent slows down towards to make intersection approach more realistic
     private Queue<CarAI> trafficQueue = new();
     public CarAI currentCar;
     public bool currentCarGoing = false;
@@ -28,6 +28,7 @@ public class ApproachHandler : MonoBehaviour
             {
                 if (car != currentCar && !car.IsThisLastPathIndex())
                 {
+                    //provide car with intersection logic approach handler recieved from the intersection
                     car.IntersectionLogic = intersectionLogic;
                     trafficQueue.Enqueue(car);
                 }
@@ -42,37 +43,23 @@ public class ApproachHandler : MonoBehaviour
             if (trafficQueue.Count > 0)
             {
                 currentCar = trafficQueue.Dequeue();
-                currentCar.Approaching();
                 currentCar.SetStoppingPoint(stoppingPoint.position);
-                checkCanGo();
+                CheckCanGo();
             }
         }
         else
         {
-            checkCanGo();
+            CheckCanGo();
         }
     }
 
-    private void checkCanGo()
+    private void CheckCanGo()
     {
         if (!currentCar.IsTakingIntersection() && !currentCar.MakeIntersectionDecision())
         {
             currentCar.SetStoppingPoint(stoppingPoint.position);
         }
     }
-
-    //Potentially might need to add this back in case another car grazes the side of the collider and enters the queue without leaving the expected way
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("Car"))
-    //    {
-    //        if (other.TryGetComponent<CarAI>(out CarAI car))
-    //        {
-    //            RemoveCar(car);
-    //        }
-    //    }
-    //}
 
     public void RemoveCar(CarAI car)
     {
