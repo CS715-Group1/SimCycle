@@ -230,6 +230,16 @@ public class CarAI : MonoBehaviour
         }
     }
 
+    public void UpdateVertex()
+    {
+        if (vertexIndex < vertexPath.Count - 1)
+        {
+            vertexIndex++;
+            vertex = vertexPath[vertexIndex];
+        }
+
+    }
+
     private void CheckIfArrived()
     {
         if (Stop == false)
@@ -307,6 +317,7 @@ public class CarAI : MonoBehaviour
     {
         if (intersectionLogic.IsAbleToGo(nextTurn, carsSeen, GameState.Instance.useVision))
         {
+            Debug.Log("SHOULD GO");
             vertex = vertexPath[vertexIndex];
             //stopping position is offset to make it in the center of the intersection
             stoppingPos = vertexPath[vertexIndex].position + new Vector3(3.5f, 0, 3.5f);

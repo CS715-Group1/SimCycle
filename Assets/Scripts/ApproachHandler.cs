@@ -43,6 +43,7 @@ public class ApproachHandler : MonoBehaviour
             if (trafficQueue.Count > 0)
             {
                 currentCar = trafficQueue.Dequeue();
+                currentCar.UpdateVertex();
                 currentCar.SetStoppingPoint(stoppingPoint.position);
                 CheckCanGo();
             }
