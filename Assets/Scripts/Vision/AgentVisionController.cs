@@ -10,6 +10,7 @@ using UnityEngine.Events;
 /// </summary>
 public class AgentVisionController : MonoBehaviour
 {
+    [SerializeField] public bool useVision = true;
     [SerializeField] IDetector detector;
 
     /// <summary>
@@ -66,6 +67,8 @@ public class AgentVisionController : MonoBehaviour
     // Advance one simulation step
     private void Step()
     {
+        if (!useVision) return;
+
         //Debug.Log($"Step {step}");
         step++;
 

@@ -104,6 +104,8 @@ public class RaycastDepthBufferDetector : IDetector
         totalCount = 0;
         visibleCount = 0;
 
+        Texture2D visibleTexture = new(camera.pixelWidth, camera.pixelHeight);
+
         // Loop through the pixels and check if the corresponding objects are in the "Identifiable" layer.
         for (int y = 0; y < texture.height; y += (int)(1 / scaleFactor))
         {
@@ -126,14 +128,16 @@ public class RaycastDepthBufferDetector : IDetector
                     if (identifiableObject != null && identifiableObject.Equals(obj))
                     {
                         visibleCount++;
+                        visibleTexture.SetPixel(x, y, Color.black);
                     }
                 }
             }
         }
 
+        visibleTexture.Apply();
 
         // Drawing to the display plane.
-        if (display != null) display.ApplyTexture(texture);
+        if (display != null) display.ApplyTexture(visibleTexture);
 
         SetLayerRecursive(obj.gameObject, "Identifiable");
 
