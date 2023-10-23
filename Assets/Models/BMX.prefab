@@ -664,6 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0178160527c9d4fbcb8eb66c1ed8b51f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useVision: 1
   detector: {fileID: 3117772302064699155}
   reactionTime: 0.5
   <PublishSeenCars>k__BackingField:
