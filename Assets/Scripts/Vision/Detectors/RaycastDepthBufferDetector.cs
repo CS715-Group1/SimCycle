@@ -133,7 +133,7 @@ public class RaycastDepthBufferDetector : IDetector
 
 
         // Drawing to the display plane.
-        display.ApplyTexture(texture);
+        if (display != null) display.ApplyTexture(texture);
 
         SetLayerRecursive(obj.gameObject, "Identifiable");
 
@@ -162,8 +162,14 @@ public class RaycastDepthBufferDetector : IDetector
         return ratio >= recognizableThreshold;
     }
 
+    /// <summary>
+    /// Necessary to set recursive layers as models may contain multiple components
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="layer"></param>
     private void SetLayerRecursive(GameObject obj, string layer)
     {
+        obj.layer = LayerMask.NameToLayer(layer);
         foreach (Transform child in obj.transform)
         {
             // Set the layer for each child

@@ -91,7 +91,7 @@ public class AgentVisionController : MonoBehaviour
         foreach (IdentifiableObject obj in allIdentifiableObjects)
         {
             // Check if the object's instance ID is not the same as the current object's instance ID.
-            if (obj.GetInstanceID() != this.GetInstanceID())
+            if (obj.gameObject != this.gameObject && obj.isActiveAndEnabled)
             {
                 identifiableObjects.Add(obj);
             }

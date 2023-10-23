@@ -389,6 +389,8 @@ public class CarAI : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (path == null) return;
+
         Gizmos.color = Color.green;
 
         for (int i = 0; i < path.Count - 1; i++)
