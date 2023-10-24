@@ -421,7 +421,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4247489454020663162}
   - component: {fileID: 6460199167058211362}
-  - component: {fileID: 2627833890274884988}
   m_Layer: 0
   m_Name: Enter Triggers
   m_TagString: Untagged
@@ -469,24 +468,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.368396, y: 1, z: 7.384129}
   m_Center: {x: -0.0064849854, y: 0, z: 0.011588335}
---- !u!114 &2627833890274884988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5286372781707400494}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8499dda01bc1f03439c9ee581eca597f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentCar: {fileID: 0}
-  approachHandlers:
-  - {fileID: 362622665999640454}
-  - {fileID: 3099132694313215801}
-  - {fileID: 4270116942966297989}
-  - {fileID: 8610870213561940591}
 --- !u!1 &5871013691854484899
 GameObject:
   m_ObjectHideFlags: 0

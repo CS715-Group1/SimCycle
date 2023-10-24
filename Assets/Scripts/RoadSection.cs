@@ -12,7 +12,7 @@ public class IntersectionConnection
 
 public class RoadSection : MonoBehaviour
 {
-    [SerializeField] private List<IntersectionConnection> connections;
+    [SerializeField] private List<IntersectionConnection> connections;//The entry and exit points for the section of the road
 
     private int weight = 0;
     [SerializeField] private List<Lane> lanes = new();
@@ -53,6 +53,9 @@ public class RoadSection : MonoBehaviour
         }
     }
 
+    //method makes a lane by getting the nearest target to the entry that isn't part of the same object
+    //This will be the next target on the orad in the same lane which will be added to the lane list
+    //This process is repeated for the amount of time equal to the number of road prefabs
     private Lane MakeLane(Target entry)
     {
         Lane lane = new Lane();
@@ -62,7 +65,7 @@ public class RoadSection : MonoBehaviour
         for (int i = 0; i < sectionNumber - 1; i++)
         {
             float distance = float.MaxValue;
-            Transform lastTargetTransform = lane.lastTarget();
+            Transform lastTargetTransform = lane.lastTarget();//The previously added target to continue the road creation
             Target nextTarget = null;
 
             foreach (var item in targets)
@@ -80,13 +83,8 @@ public class RoadSection : MonoBehaviour
 
             }
 
-            if(i == sectionNumber - 2)
-            {
-                //nextTarget.laneEnd = true;
-            }
-
             lane.AddTarget(nextTarget);
-            nextTarget.OpenForConnection = false;
+            nextTarget.OpenForConnection = false;//prevent accidental access in future
         }
         return lane;
         

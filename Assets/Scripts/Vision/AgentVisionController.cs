@@ -10,6 +10,7 @@ using UnityEngine.Events;
 /// </summary>
 public class AgentVisionController : MonoBehaviour
 {
+    [SerializeField] public bool useVision = true;
     [SerializeField] IDetector detector;
 
     /// <summary>
@@ -66,6 +67,8 @@ public class AgentVisionController : MonoBehaviour
     // Advance one simulation step
     private void Step()
     {
+        if (!useVision) return;
+
         //Debug.Log($"Step {step}");
         step++;
 
@@ -91,7 +94,7 @@ public class AgentVisionController : MonoBehaviour
         foreach (IdentifiableObject obj in allIdentifiableObjects)
         {
             // Check if the object's instance ID is not the same as the current object's instance ID.
-            if (obj.GetInstanceID() != this.GetInstanceID())
+            if (obj.gameObject != this.gameObject && obj.isActiveAndEnabled)
             {
                 identifiableObjects.Add(obj);
             }

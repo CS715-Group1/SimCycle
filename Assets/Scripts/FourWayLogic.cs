@@ -33,6 +33,8 @@ public class FourWayLogic : IntersectionLogic
         bool leftGoing = false;
         bool oppositeGoing = false;
 
+
+        //Only get the states of cars that the car can see if using vision
         if (!useVision || carsSeen.Contains(rightCar)){
             rightLaneTurn = rightLane.GetCurrentCarTurn();
         } 
@@ -48,6 +50,7 @@ public class FourWayLogic : IntersectionLogic
             oppositeGoing = oppositeLane.GetCurrentCarGoing();
         }
 
+        //Check for right of way, returning false if car does not have right of way
         switch (turn)
         {
             case Turning.LEFT:

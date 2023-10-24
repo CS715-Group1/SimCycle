@@ -27,11 +27,11 @@ Transform:
   m_GameObject: {fileID: 1397944553824146146}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.86, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 493714838310654429}
+  m_Father: {fileID: 3918504375438329176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8969523871225257311
 Camera:
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a85ac669555e4526b721148b0589db2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxViewAngle: 90
+  maxViewAngle: 120
 --- !u!1 &1408988130224669670
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,68 +349,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &3760719996042650937
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 493714838310654429}
-  - component: {fileID: 2831970343006157496}
-  m_Layer: 10
-  m_Name: Driver
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &493714838310654429
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3760719996042650937}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.86, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 869865075249618413}
-  m_Father: {fileID: 3918504375438329176}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2831970343006157496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3760719996042650937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0178160527c9d4fbcb8eb66c1ed8b51f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detector: {fileID: 3117772302064699155}
-  reactionTime: 0.5
-  <PublishSeenCars>k__BackingField:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6258976188675562119}
-        m_TargetAssemblyTypeName: CarAI, Assembly-CSharp
-        m_MethodName: UpdateSeenCars
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &3780231678718711272
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +479,7 @@ GameObject:
   - component: {fileID: 6258976188675562119}
   - component: {fileID: 6402279457126302062}
   - component: {fileID: 860715783273215185}
+  - component: {fileID: 8667381842087517255}
   m_Layer: 10
   m_Name: BMX
   m_TagString: Car
@@ -561,7 +500,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 493714838310654429}
+  - {fileID: 869865075249618413}
   - {fileID: 1343670543227637812}
   - {fileID: 4696636224646250611}
   - {fileID: 8822040978378415275}
@@ -713,6 +652,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ede7b12b584444291cfc510a580a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8667381842087517255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7440654739473266381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0178160527c9d4fbcb8eb66c1ed8b51f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useVision: 1
+  detector: {fileID: 3117772302064699155}
+  reactionTime: 0.5
+  <PublishSeenCars>k__BackingField:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6258976188675562119}
+        m_TargetAssemblyTypeName: CarAI, Assembly-CSharp
+        m_MethodName: UpdateSeenCars
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8657773909806089008
 GameObject:
   m_ObjectHideFlags: 0
