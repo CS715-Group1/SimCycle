@@ -884,7 +884,7 @@ MonoBehaviour:
   maxDistance: 100
   recognizableThreshold: 0.7
   postprocessMaterial: {fileID: 2100000, guid: 9779378819b33124b9dc832ce7e36f02, type: 2}
-  maxDimension: 128
+  maxDimension: 300
   display: {fileID: 0}
 --- !u!114 &7646178649044406659
 MonoBehaviour:
